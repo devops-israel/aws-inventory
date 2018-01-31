@@ -91,13 +91,14 @@
         var tabs = []
         var tabPanes = []
         ec2.describeRegions(function(err, data) {
-          for (var i=0; i<data.Regions.length; i++) {
-            var region_name = data.Regions[i].RegionName;
-            tabs.push( $('<li class="nav-item"><a href="#region-'+region_name+'" id="tab-region-'+region_name+'" class="nav-link" data-toggle="pill" role="tab">'+region_name+'</a></li>') );
-            tabPanes.push( $('<div class="tab-pane show" id="region-'+region_name+'" role="tabpanel" aria-labelledby="tab-region-'+region_name+'">'+region_name+'</div>') )
+          var regions = data.Regions.map(function(r){ return r.RegionName }).sort();
+          for (var i=0; i<regions.length; i++) {
+            tabs.push( $('<li class="nav-item"><a href="#region-'+regions[i]+'" id="tab-region-'+regions[i]+'" class="nav-link" data-toggle="pill" role="tab">'+regions[i]+'</a></li>') );
+            tabPanes.push( $('<div class="tab-pane show" id="region-'+regions[i]+'" role="tabpanel" aria-labelledby="tab-region-'+regions[i]+'">'+regions[i]+'</div>') )
           }
           $('#aws-region-tabs').append(tabs);
           $('#aws-inventory').append(tabPanes);
+          $('#tab-region-'+regions[0]).tab('show');
         })
       }
 

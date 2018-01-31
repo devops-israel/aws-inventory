@@ -1,8 +1,8 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <title>AWS Inventory</title>
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
@@ -59,7 +59,16 @@
 
     </div><!-- /navbar -->
 
-    <div id="inventory"></div>
+    <div id="alerts"></div>
+
+    <div class="row mt-2">
+      <div class="col-2">
+        <ul id="aws-region-tabs" class="nav flex-sm-column nav-pills" role="tablist" aria-orientation="vertical"></ul><!-- regions -->
+      </div>
+      <div class="col-10">
+        <div id="aws-inventory" class="tab-content"></div>
+      </div>
+    </div>
 
   </div><!-- /container -->
 
@@ -71,8 +80,33 @@
   <script>
     $(function () {
       // bootstrap utils
-      $('.alert').alert()
-      $('[data-toggle="tooltip"]').tooltip()
+      $('.alert').alert();
+      $('[data-toggle="tooltip"]').tooltip();
+      $('#aws-credentials input').val('');
+
+      function contentRegionsCreate() {
+        /* creates tabs and tab-content for each region available, as returned
+           by the ec2 api */
+        var ec2 = new AWS.EC2()
+        var tabs = []
+        var tabPanes = []
+        ec2.describeRegions(function(err, data) {
+          for (var i=0; i<data.Regions.length; i++) {
+            var region_name = data.Regions[i].RegionName;
+            tabs.push( $('<li class="nav-item"><a href="#region-'+region_name+'" id="tab-region-'+region_name+'" class="nav-link" data-toggle="pill" role="tab">'+region_name+'</a></li>') );
+            tabPanes.push( $('<div class="tab-pane show" id="region-'+region_name+'" role="tabpanel" aria-labelledby="tab-region-'+region_name+'">'+region_name+'</div>') )
+          }
+          $('#aws-region-tabs').append(tabs);
+          $('#aws-inventory').append(tabPanes);
+        })
+      }
+
+      function credentialsFailAlert(message) {
+        var closeButton = $('<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>')
+        var alert = $('<div class="alert alert-danger alert-dismissible show my-2" role="alert"><strong>Error verifying credentials.</strong> '+message+'</div>')
+        alert.append(closeButton);
+        $('#alerts').append(alert);
+      }
 
       function credentialsVerify(event) {
         /* verify that the entered credentials are usable
@@ -85,13 +119,20 @@
         })
         var sts = new AWS.STS()
         sts.getCallerIdentity(function(err, data) {
-          $('#aws-credentials-arn').val(data.Arn)
-          $('#aws-credentials').hide()
+          event.preventDefault();
+          if (err) {
+            $('#aws-credentials-verify').prop('disabled', false);
+            credentialsFailAlert(err.message);
+            return false
+          }
+          $('#aws-credentials-arn').val(data.Arn);
+          $('.alert').alert('close');
+          $('#aws-credentials').hide();
           $('#aws-credentials-verify').prop('disabled', false);
-          $('#aws-credentials-arn-form').show()
-          $('#aws-credentials input').val('')
+          $('#aws-credentials-arn-form').show();
+          $('#aws-credentials input').val('');
+          contentRegionsCreate();
         })
-        event.preventDefault();
         return false
       }
 

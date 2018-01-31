@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>AWS Inventory</title>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+</head>
+<body>
+  <div class="container"><!-- container -->
+
+    <div class="navbar navbar-expand-md navbar-light bg-light"><!-- navbar -->
+      <a href="#" class="navbar-brand">AWS Inventory</a>
+
+      <form id="aws-credentials" role="form" class="form-inline col"><!-- credentials -->
+        <div class="form-row col">
+          <div class="col align-self-start">
+            <div class="input-group input-group-sm">
+              <div class="input-group-prepend">
+                <span class="input-group-text">AWS Key ID</span>
+              </div>
+              <input type="text" tabindex="1" id="aws-access-key-id" class="form-control form-control-sm" placeholder="AKIA0123456789ABCDEF">
+            </div>
+          </div>
+          <div class="col align-self-start">
+            <div class="input-group input-group-sm">
+              <div class="input-group-prepend">
+                <span class="input-group-text">Secret</span>
+              </div>
+              <input type="password" tabindex="2" id="aws-access-secret-key" class="form-control form-control-sm" placeholder="0123456789abcdef">
+            </div>
+          </div>
+          <div class="col col-2 align-self-end">
+            <div class="input-group input-group-sm">
+              <button type="submit" tabindex="3" id="aws-credentials-verify" class="btn btn-outline-primary btn-sm form-control form-control-sm" data-toggle="button" aria-pressed="false" autocomplete="off">confirm identity</button>
+            </div>
+          </div>
+        </div>
+      </form><!-- /credentials -->
+
+      <form id="aws-credentials-arn-form" class="form-inline col" style="display:none"><!-- credentials-arn -->
+        <div class="form-row col">
+          <div class="col col-12 align-self-start">
+            <div class="input-group input-group-sm">
+              <div class="input-group-prepend bg-light">
+                <span class="input-group-text bg-light">Credentials ARN</span>
+              </div>
+              <input type="text" id="aws-credentials-arn" readonly class="form-control form-control-sm">
+              <div class="input-group-append">
+                <button type="button" id="aws-credentials-drop" class="btn btn-dark" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </form><!-- /credentials-arn -->
+
+    </div><!-- /navbar -->
+
+    <div id="inventory"></div>
+
+  </div><!-- /container -->
+
+  </body>
+  <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+  <script src="https://sdk.amazonaws.com/js/aws-sdk-2.188.0.min.js"></script>
+  <script>
+    $(function () {
+      // bootstrap utils
+      $('.alert').alert()
+      $('[data-toggle="tooltip"]').tooltip()
+
+      function credentialsVerify(event) {
+        /* verify that the entered credentials are usable
+           then hide credentials input form */
+        $('#aws-credentials-verify').prop('disabled', true);
+        AWS.config.region = 'us-east-1'
+        AWS.config.credentials = new AWS.Credentials({
+          accessKeyId: $('#aws-access-key-id').val(),
+          secretAccessKey: $('#aws-access-secret-key').val(),
+        })
+        var sts = new AWS.STS()
+        sts.getCallerIdentity(function(err, data) {
+          $('#aws-credentials-arn').val(data.Arn)
+          $('#aws-credentials').hide()
+          $('#aws-credentials-verify').prop('disabled', false);
+          $('#aws-credentials-arn-form').show()
+          $('#aws-credentials input').val('')
+        })
+        event.preventDefault();
+        return false
+      }
+
+      function credentialsDrop() {
+        /* forget stored credentials, and show input form for credentials */
+        AWS.config.credentials = undefined
+        $('#aws-credentials-arn-form').hide()
+        $('#aws-credentials-verify').prop('disabled', false);
+        $('#aws-credentials').show()
+      }
+
+      $('#aws-credentials-verify').on('click', credentialsVerify);
+      $('#aws-credentials-drop').on('click', credentialsDrop);
+    });
+  </script>
+</html>

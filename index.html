@@ -91,6 +91,8 @@
         var tabs = []
         var tabPanes = []
         ec2.describeRegions(function(err, data) {
+          $('#aws-region-tabs').empty()
+          $('#aws-inventory').empty()
           var regions = data.Regions.map(function(r){ return r.RegionName }).sort();
           for (var i=0; i<regions.length; i++) {
             tabs.push( $('<li class="nav-item"><a href="#region-'+regions[i]+'" id="tab-region-'+regions[i]+'" class="nav-link" data-toggle="pill" role="tab">'+regions[i]+'</a></li>') );
@@ -143,6 +145,8 @@
         $('#aws-credentials-arn-form').hide()
         $('#aws-credentials-verify').prop('disabled', false);
         $('#aws-credentials').show()
+        $('#aws-region-tabs').empty()
+        $('#aws-inventory').empty()
       }
 
       $('#aws-credentials-verify').on('click', credentialsVerify);

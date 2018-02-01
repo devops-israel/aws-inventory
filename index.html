@@ -301,6 +301,9 @@
                 content.empty()
                 var alert = $('<div class="alert alert-danger show my-2" role="alert"><strong>Error:</strong> '+err.message+'</div>')
                 content.append(alert);
+                button.find('.badge').removeClass('badge-light').addClass('badge-danger').text('X')
+                button.find('.spinner').hide()
+                button.find('.badge').show()
                 return false
               }
               const information = jmespath.search(data, `${query.jmespath}[]`)

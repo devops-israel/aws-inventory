@@ -7,7 +7,7 @@ A single-file that shows the whole inventory of your AWS services on a single pa
 * Clone or copy the `index.html` file to your computer
 * Open the `index.html` file in your browser
 
-## How does it look like?
+## How it looks
 
 ![screenshot](/example-screenshot.png?raw=true "Example AWS Inventory")
 

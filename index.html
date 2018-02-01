@@ -126,6 +126,7 @@
   <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jmespath/0.15.0/jmespath.min.js"></script>
   <script src="https://sdk.amazonaws.com/js/aws-sdk-2.188.0.min.js"></script>
   <script>
     $(function () {
@@ -140,15 +141,22 @@
           api: "listCertificates",
           title: "ACM Certificates",
           id: "acm-certificates",
-          array: "CertificateSummaryList",
+          jmespath: "CertificateSummaryList",
           headings: ["DomainName", "CertificateArn"]
         },
         { service: "APIGateway",
           api: "getRestApis",
           title: "API Gateway REST APIs",
           id: "apigw-rest-apis",
-          array: "items",
+          jmespath: "items",
           headings: ["id", "name", "description", "createdDate"]
+        },
+        { service: "EC2",
+          api: "describeInstances",
+          title: "EC2 Instances",
+          id: "ec2-instances",
+          jmespath: "Reservations[].Instances",
+          headings: ["InstanceId", "InstanceType", "ImageId", "LaunchTime", "KeyName", "State.Name"]
         },
       ];
 
@@ -191,7 +199,7 @@
           const tr = $('<tr></tr>')
           tr.append($(`<td class="text-center">${d + 1}</td>`))
           for (let h=0; h<headings.length; h++) {
-            tr.append($(`<td>${data[d][headings[h]]}</td>`))
+            tr.append($(`<td>${jmespath.search(data[d], headings[h])}</td>`))
           }
           rows.push(tr)
         }
@@ -213,11 +221,18 @@
             button.find('.title').text(query.title);
             $(`#region-${region}`).append([button, content]);
             caller[query.api].call(caller, function(err, data) {
-              button.find('.badge').text(data[query.array].length)
+              if (err) {
+                content.empty()
+                var alert = $('<div class="alert alert-danger show my-2" role="alert"><strong>Error:</strong> '+err.message+'</div>')
+                content.append(alert);
+                return false
+              }
+              const information = jmespath.search(data, `${query.jmespath}[]`)
+              button.find('.badge').text(information.length)
               button.find('.spinner').hide()
               button.find('.badge').show()
               content.find('thead').append(createTableHead(query.headings))
-              content.find('tbody').append(createTableBody(query.headings, data[query.array]))
+              content.find('tbody').append(createTableBody(query.headings, information))
             })
           }
         }

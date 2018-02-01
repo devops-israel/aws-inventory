@@ -65,7 +65,7 @@
 
       <form id="aws-credentials" role="form" class="form-inline col"><!-- credentials -->
         <div class="form-row col">
-          <div class="col align-self-start">
+          <div class="col col-5 align-self-start">
             <div class="input-group input-group-sm">
               <div class="input-group-prepend">
                 <span class="input-group-text">AWS Key ID</span>
@@ -73,7 +73,7 @@
               <input type="text" tabindex="1" id="aws-access-key-id" class="form-control form-control-sm" placeholder="AKIA0123456789ABCDEF">
             </div>
           </div>
-          <div class="col align-self-start">
+          <div class="col col-5">
             <div class="input-group input-group-sm">
               <div class="input-group-prepend">
                 <span class="input-group-text">Secret</span>
@@ -81,9 +81,41 @@
               <input type="password" tabindex="2" id="aws-access-secret-key" class="form-control form-control-sm" placeholder="0123456789abcdef">
             </div>
           </div>
-          <div class="col col-2 align-self-end">
+          <div class="col col-1 align-self-end">
             <div class="input-group input-group-sm">
-              <button type="submit" tabindex="3" id="aws-credentials-verify" class="btn btn-outline-primary btn-sm form-control form-control-sm" data-toggle="button" aria-pressed="false" autocomplete="off">confirm identity</button>
+              <button type="submit" tabindex="7" id="aws-credentials-verify" class="btn btn-outline-primary btn-sm form-control form-control-sm" data-toggle="button" aria-pressed="false" autocomplete="off">confirm</button>
+            </div>
+          </div>
+          <div class="col col-1 align-self-end">
+            <div class="input-group input-group-sm">
+              <button type="button" tabindex="8" id="btn-aws-assume-role" class="btn btn-outline-secondary btn-sm form-control form-control-sm" data-toggle="button" aria-expanded="false" aria-pressed="false" aria-controls="aws-assume-role" autocomplete="off">assume role</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-row col col-12 mt-1" id="aws-assume-role" style="display:none">
+          <div class="col col-4">
+            <div class="input-group input-group-sm">
+              <div class="input-group-prepend">
+                <div class="input-group-text">Role ARN</div>
+              </div>
+              <input type="text" id="aws-role-arn" class="form-control form-control-sm" tabindex="4" placeholder="arn:aws:iam::123456789012:role/demo">
+            </div>
+          </div>
+          <div class="col col-4">
+            <div class="input-group input-group-sm">
+              <div class="input-group-prepend">
+                <div class="input-group-text">External ID</div>
+              </div>
+              <input type="text" id="aws-external-id" class="form-control form-control-sm" tabindex="5" placeholder="optionally required">
+            </div>
+          </div>
+          <div class="col col-2">
+            <div class="input-group input-group-sm">
+              <div class="input-group-prepend">
+                <div class="input-group-text">MFA Code</div>
+              </div>
+              <input type="text" id="aws-mfa-token-code" class="form-control form-control-sm" tabindex="6" placeholder="optionally required">
             </div>
           </div>
         </div>
@@ -427,10 +459,14 @@
         $('#aws-credentials-verify').prop('disabled', true);
         AWS.config.region = 'us-east-1'
         // AWS.config.logger = console // for debugging AWS-SDK
-        AWS.config.credentials = new AWS.Credentials({
+        const credentials = {
           accessKeyId: $('#aws-access-key-id').val(),
           secretAccessKey: $('#aws-access-secret-key').val(),
-        })
+        }
+        const role_arn = $('#aws-role-arn').val()
+        const external_id = $('#aws-external-id').val()
+        const token_code = $('#aws-mfa-token-code').val()
+        AWS.config.credentials = new AWS.Credentials(credentials)
         var sts = new AWS.STS()
         sts.getCallerIdentity(function(err, data) {
           event.preventDefault();
@@ -439,13 +475,41 @@
             credentialsFailAlert(err.message);
             return false
           }
-          $('#aws-credentials-arn').val(data.Arn);
-          $('.alert').alert('close');
-          $('#aws-credentials').hide();
-          $('#aws-credentials-verify').prop('disabled', false);
-          $('#aws-credentials-arn-form').show();
-          $('#aws-credentials input').val('');
-          contentRegionsCreate();
+          if (role_arn !== '') {
+            const external_params = external_id ? { ExternalId: external_id } : {};
+            // , SerialNumber: data.Arn.replace(':user/', ':mfa/')
+            const token_params = token_code ? { TokenCode: token_code, SerialNumber: data.Arn.replace(':user/', ':mfa/') } : {};
+            const assume_role_params = Object.assign({
+              RoleArn: role_arn,
+              RoleSessionName: 'aws-inventory',
+              DurationSeconds: 900,
+              Policy: `{"Statement":[{"Effect":"Allow","Action":"*","Resource":"*"}]}`
+            }, external_params, token_params)
+            sts.assumeRole(assume_role_params, function(err,data) {
+              event.preventDefault();
+              if (err) {
+                $('#aws-credentials-verify').prop('disabled', false);
+                credentialsFailAlert(err.message);
+                return false
+              }
+              AWS.config.credentials = new AWS.Credentials(data.Credentials.AccessKeyId, data.Credentials.SecretAccessKey, data.Credentials.SessionToken)
+              $('#aws-credentials-arn').val(data.AssumedRoleUser.Arn);
+              $('.alert').alert('close');
+              $('#aws-credentials').hide();
+              $('#aws-credentials-verify').prop('disabled', false);
+              $('#aws-credentials-arn-form').show();
+              $('#aws-credentials input').val('');
+              contentRegionsCreate();
+            })
+          } else {
+            $('#aws-credentials-arn').val(data.Arn);
+            $('.alert').alert('close');
+            $('#aws-credentials').hide();
+            $('#aws-credentials-verify').prop('disabled', false);
+            $('#aws-credentials-arn-form').show();
+            $('#aws-credentials input').val('');
+            contentRegionsCreate();
+          }
         })
         return false
       }
@@ -462,6 +526,7 @@
 
       $('#aws-credentials-verify').on('click', credentialsVerify);
       $('#aws-credentials-drop').on('click', credentialsDrop);
+      $('#btn-aws-assume-role').on('click', function(){ $('#aws-assume-role').show(); $('#btn-aws-assume-role').hide() })
     });
   </script>
 </html>

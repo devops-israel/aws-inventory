@@ -251,6 +251,28 @@
           jmespath: "CloudFrontOriginAccessIdentityList.Items",
           headings: ["Id", "S3CanonicalUserId", "Comment"]
         },
+        // -- no CORS for CloudHSMV2 and CloudHSM is deprecated
+        // { service: "CloudHSMV2",
+        //   api: "describeBackups",
+        //   title: "CloudHSM Backups",
+        //   id: "cloudhsm-backups",
+        //   jmespath: "Backups",
+        //   headings: ["BackupId", "BackupState", "ClusterId", "CreateTimestamp"]
+        // },
+        // { service: "CloudHSMV2",
+        //   api: "describeClusters",
+        //   title: "CloudHSM Clusters",
+        //   id: "cloudhsm-clusters",
+        //   jmespath: "Clusters",
+        //   headings: ["ClusterId", "CreateTimestamp", "HsmType", "State"]
+        // },
+        // { service: "CloudHSMV2",
+        //   api: "describeClusters",
+        //   title: "CloudHSM Cluster HSMs",
+        //   id: "cloudhsm-clusters",
+        //   jmespath: "Clusters.Hsms",
+        //   headings: ["HsmId", "ClusterId", "AvailabilityZone", "State", "StateMessage"]
+        // },
         { service: "CodeCommit",
           api: "listRepositories",
           title: "CodeCommit Repositories",

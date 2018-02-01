@@ -207,6 +207,20 @@
           jmespath: "DistributionList.Items",
           headings: ["Id", "Status", "DomainName", "LastModifiedTime", "Origins.Items[].DomainName"]
         },
+        { service: "CodeCommit",
+          api: "listRepositories",
+          title: "CodeCommit Repositories",
+          id: "codecommit-repositories",
+          jmespath: "repositories",
+          headings: ["repositoryId", "repositoryName"]
+        },
+        { service: "ECS",
+          api: "describeClusters",
+          title: "ECS Clusters",
+          id: "ecs-clusters",
+          jmespath: "clusters",
+          headings: ["clusterName", "status", "registeredContainerInstancesCount", "runningTasksCount", "pendingTasksCount", "activeServicesCount", "failures[].reason"]
+        },
         { service: "EC2",
           api: "describeInstances",
           title: "EC2 Instances",

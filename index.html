@@ -6,6 +6,56 @@
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <title>AWS Inventory</title>
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+  <style>
+    /* spinner from Bootstrap v4.1 https://github.com/twbs/bootstrap/pull/22960 */
+    @keyframes spinner-border {
+      to { transform: rotate(360deg); }
+    }
+
+    .spinner-border {
+      position: relative;
+      display: inline-block;
+      width: 2rem;
+      height: 2rem;
+      overflow: hidden;
+      text-indent: -999em;
+      vertical-align: text-bottom;
+      border: .25em solid;
+      border-color: currentColor transparent currentColor currentColor;
+      border-radius: 50%;
+      animation-name: spinner-border;
+      animation-duration: .75s;
+      animation-timing-function: linear;
+      animation-iteration-count: infinite;
+    }
+
+    .spinner-border-reverse {
+      border-color: transparent currentColor transparent transparent;
+    }
+
+    .spinner-border-reverse::after {
+      position: absolute;
+      top: -.25em;
+      right: -.25em;
+      bottom: -.25em;
+      left: -.25em;
+      display: inline-block;
+      content: "";
+      border: .25em solid rgba(0, 0, 0, .1);
+      border-radius: 50%;
+    }
+
+    .spinner-border-sm {
+      width: 1rem;
+      height: 1rem;
+      border-width: .2em;
+
+    }
+
+    .spinner-border-sm.spinner-border-reverse::after {
+      border-width: .2em;
+    }
+  </style>
 </head>
 <body>
   <div class="container"><!-- container -->
@@ -81,8 +131,162 @@
     $(function () {
       // bootstrap utils
       $('.alert').alert();
+      $('.collapse').collapse();
       $('[data-toggle="tooltip"]').tooltip();
       $('#aws-credentials input').val('');
+
+      var awsQueries = [
+        { service: "ACM",
+          api: "listCertificates",
+          title: "ACM Certificates",
+          id: "acm-certificates",
+          array: "CertificateSummaryList",
+          headings: ["DomainName", "CertificateArn"]
+        },
+        { service: "APIGateway",
+          api: "getRestApis",
+          title: "API Gateway REST APIs",
+          id: "apigw-rest-apis",
+          array: "items",
+          headings: ["id", "name", "description", "createdDate"]
+        },
+      ];
+
+      var awsInventory = new Map([
+        ["ACM", new Map([["listCertificates", {
+          "name": "ACM Certificates",
+          "id": "acm-certificates",
+          "array": "CertificateSummaryList",
+          "titles": ["DomainName", "CertificateArn"]
+        }]])],
+        ["APIGateway", new Map([["getRestApis", {
+          "name": "API Gateway REST APIs",
+          "id": "apigw-rest-apis",
+          "array": "items",
+          "titles": ["id","name","description","createdDate"]
+        }]])],
+        ["ApplicationAutoScaling", new Map([
+          ["describeScalableTargets", {
+            "params": [
+              {"ServiceNamespace": "ecs"},
+              {"ServiceNamespace": "elasticmapreduce"},
+              {"ServiceNamespace": "ec2"},
+              {"ServiceNamespace": "appstream"},
+              {"ServiceNamespace": "dynamodb"},
+              {"ServiceNamespace": "rds"}
+            ],
+            "array": "ScalableTargets",
+            "titles": ["ResourceId", "ScalableDimension", "MinCapacity", "MaxCapacity", "RoleARN", "CreationTime"]
+          }], // describeScalableTargets
+          ["describeScalingActivities", {
+            "params": [
+              {"ServiceNamespace": "ecs"},
+              {"ServiceNamespace": "elasticmapreduce"},
+              {"ServiceNamespace": "ec2"},
+              {"ServiceNamespace": "appstream"},
+              {"ServiceNamespace": "dynamodb"},
+              {"ServiceNamespace": "rds"}
+            ],
+            "array": "ScalingActivities",
+            "titles": ["ActivityId", "ResourceId", "ScalableDimension", "Description", "Cause", "StartTime", "EndTime", "StatusCode", "StatusMessage", "Details"]
+          }], // describeScalingActivities
+          ["describeScalingPolicies", {
+            "params": [
+              {"ServiceNamespace": "ecs"},
+              {"ServiceNamespace": "elasticmapreduce"},
+              {"ServiceNamespace": "ec2"},
+              {"ServiceNamespace": "appstream"},
+              {"ServiceNamespace": "dynamodb"},
+              {"ServiceNamespace": "rds"}
+            ],
+            "array": "ScalingPolicies",
+            "titles": ["PolicyARN", "PolicyName", "ResourceId", "ScalableDimension", "PolicyType"]
+          }], // describeScalingPolicies
+          ["describeScheduledActions", {
+            "params": [
+              {"ServiceNamespace": "ecs"},
+              {"ServiceNamespace": "elasticmapreduce"},
+              {"ServiceNamespace": "ec2"},
+              {"ServiceNamespace": "appstream"},
+              {"ServiceNamespace": "dynamodb"},
+              {"ServiceNamespace": "rds"}
+            ],
+            "array": "ScheduledActions",
+            "titles": ["ScheduledActionName", "ScheduledActionARN", "Schedule", "ResourceId", "ScalableDimension", "StartTime", "EndTime", "CreationTime"]
+          }] // describeScheduledActions
+        ])], // ApplicationAutoScaling
+      ]);
+
+      var tableTemplate =
+      `<div class="collapse" data-parent="#aws-inventory">
+        <div class="card-body">
+          <code>
+            <table class="table table-bordered table-hover table-sm">
+              <thead class="thead-light"></thead>
+              <tbody></tbody>
+            </table>
+          </code>
+        </div>
+      </div>`;
+
+      var serviceButton =
+      `<div class="card">
+        <div class="card-header">
+          <button class="btn btn-outline-primary" data-toggle="collapse" aria-expanded="false">
+            <span class="title"></span>
+          </button>
+          <button class="btn btn-outline-primary" data-toggle="collapse" aria-expanded="false">
+            <span class="spinner spinner-border spinner-border-sm"></span><span class="badge badge-light" style="display:none">?</span>
+          </button>
+        </div>
+      </div>`
+
+      function createTableHead(headings) {
+        const tr = $('<tr></tr>')
+        tr.append($('<th class="text-center">#</th>'))
+        for (let h=0; h<headings.length; h++) {
+          tr.append($(`<th>${headings[h]}</th>`))
+        }
+        return tr
+      }
+
+      function createTableBody(headings, data) {
+        const rows = []
+        for (d=0; d<data.length; d++) {
+          const tr = $('<tr></tr>')
+          tr.append($(`<td class="text-center">${d + 1}</td>`))
+          for (let h=0; h<headings.length; h++) {
+            tr.append($(`<td>${data[d][headings[h]]}</td>`))
+          }
+          rows.push(tr)
+        }
+        return rows
+      }
+
+      function inventoryServices() {
+        for (r=0; r<AWS_REGIONS.length; r++) {
+          let region = AWS_REGIONS[r];
+          for (let q=0; q<awsQueries.length; q++) {
+            const query = awsQueries[q]
+            const caller = new AWS[query.service]({ region: region });
+            let content = $(tableTemplate);
+            content.attr('id', `region-${region}-${query.id}`);
+            let button = $(serviceButton);
+            button.attr('id', `btn-region-${region}-${query.id}`)
+            button.find('button').attr('data-target', `#region-${region}-${query.id}`);
+            button.find('button').attr('aria-controls', `region-${region}-${query.id}`);
+            button.find('.title').text(query.title);
+            $(`#region-${region}`).append([button, content]);
+            caller[query.api].call(caller, function(err, data) {
+              button.find('.badge').text(data[query.array].length)
+              button.find('.spinner').hide()
+              button.find('.badge').show()
+              content.find('thead').append(createTableHead(query.headings))
+              content.find('tbody').append(createTableBody(query.headings, data[query.array]))
+            })
+          }
+        }
+      }
 
       function contentRegionsCreate() {
         /* creates tabs and tab-content for each region available, as returned
@@ -94,12 +298,14 @@
           $('#aws-region-tabs').empty()
           $('#aws-inventory').empty()
           var regions = data.Regions.map(function(r){ return r.RegionName }).sort();
+          window.AWS_REGIONS = regions;
           for (var i=0; i<regions.length; i++) {
             tabs.push( $('<li class="nav-item"><a href="#region-'+regions[i]+'" id="tab-region-'+regions[i]+'" class="nav-link" data-toggle="pill" role="tab">'+regions[i]+'</a></li>') );
-            tabPanes.push( $('<div class="tab-pane show" id="region-'+regions[i]+'" role="tabpanel" aria-labelledby="tab-region-'+regions[i]+'">'+regions[i]+'</div>') )
+            tabPanes.push( $('<div class="tab-pane show" id="region-'+regions[i]+'" role="tabpanel" aria-labelledby="tab-region-'+regions[i]+'"></div>') )
           }
           $('#aws-region-tabs').append(tabs);
           $('#aws-inventory').append(tabPanes);
+          inventoryServices()
           $('#tab-region-'+regions[0]).tab('show');
         })
       }
@@ -116,6 +322,7 @@
            then hide credentials input form */
         $('#aws-credentials-verify').prop('disabled', true);
         AWS.config.region = 'us-east-1'
+        // AWS.config.logger = console // for debugging AWS-SDK
         AWS.config.credentials = new AWS.Credentials({
           accessKeyId: $('#aws-access-key-id').val(),
           secretAccessKey: $('#aws-access-secret-key').val(),

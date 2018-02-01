@@ -151,6 +151,62 @@
           jmespath: "items",
           headings: ["id", "name", "description", "createdDate"]
         },
+        { service: "ApplicationAutoScaling",
+          api: "describeScalableTargets",
+          params: { ServiceNamespace: "ecs" },
+          title: "Application Auto Scaling ECS Scalable Targets",
+          id: "appscaling-scalable-targets-ecs",
+          jmespath: "ScalableTargets",
+          headings: ["ResourceId", "ScalableDimension", "MinCapacity", "MaxCapacity", "RoleARN", "CreationTime"]
+        },
+        { service: "ApplicationAutoScaling",
+          api: "describeScalableTargets",
+          params: { ServiceNamespace: "elasticmapreduce" },
+          title: "Application Auto Scaling EMR Scalable Targets",
+          id: "appscaling-scalable-targets-emr",
+          jmespath: "ScalableTargets",
+          headings: ["ResourceId", "ScalableDimension", "MinCapacity", "MaxCapacity", "RoleARN", "CreationTime"]
+        },
+        { service: "ApplicationAutoScaling",
+          api: "describeScalableTargets",
+          params: { ServiceNamespace: "ec2" },
+          title: "Application Auto Scaling EC2 Scalable Targets",
+          id: "appscaling-scalable-targets-ec2",
+          jmespath: "ScalableTargets",
+          headings: ["ResourceId", "ScalableDimension", "MinCapacity", "MaxCapacity", "RoleARN", "CreationTime"]
+        },
+        { service: "ApplicationAutoScaling",
+          api: "describeScalableTargets",
+          params: { ServiceNamespace: "appstream" },
+          title: "Application Auto Scaling AppStream Scalable Targets",
+          id: "appscaling-scalable-targets-appstream",
+          jmespath: "ScalableTargets",
+          headings: ["ResourceId", "ScalableDimension", "MinCapacity", "MaxCapacity", "RoleARN", "CreationTime"]
+        },
+        { service: "ApplicationAutoScaling",
+          api: "describeScalableTargets",
+          params: { ServiceNamespace: "dynamodb" },
+          title: "Application Auto Scaling DynamoDB Scalable Targets",
+          id: "appscaling-scalable-targets-dynamodb",
+          jmespath: "ScalableTargets",
+          headings: ["ResourceId", "ScalableDimension", "MinCapacity", "MaxCapacity", "RoleARN", "CreationTime"]
+        },
+        { service: "ApplicationAutoScaling",
+          api: "describeScalableTargets",
+          params: { ServiceNamespace: "rds" },
+          title: "Application Auto Scaling RDS Scalable Targets",
+          id: "appscaling-scalable-targets-rds",
+          jmespath: "ScalableTargets",
+          headings: ["ResourceId", "ScalableDimension", "MinCapacity", "MaxCapacity", "RoleARN", "CreationTime"]
+        },
+        { service: "CloudFront",
+          region: "global",
+          api: "listDistributions",
+          title: "CloudFront Distributions",
+          id: "cloudfront-distribution",
+          jmespath: "DistributionList.Items",
+          headings: ["Id", "Status", "DomainName", "LastModifiedTime", "Origins.Items[].DomainName"]
+        },
         { service: "EC2",
           api: "describeInstances",
           title: "EC2 Instances",
@@ -176,10 +232,10 @@
       `<div class="card">
         <div class="card-header">
           <button class="btn btn-outline-primary" data-toggle="collapse" aria-expanded="false">
-            <span class="title"></span>
+            <span class="spinner spinner-border spinner-border-sm"></span><span class="badge badge-light" style="display:none">?</span>
           </button>
           <button class="btn btn-outline-primary" data-toggle="collapse" aria-expanded="false">
-            <span class="spinner spinner-border spinner-border-sm"></span><span class="badge badge-light" style="display:none">?</span>
+            <span class="title"></span>
           </button>
         </div>
       </div>`
@@ -211,6 +267,12 @@
           let region = AWS_REGIONS[r];
           for (let q=0; q<awsQueries.length; q++) {
             const query = awsQueries[q]
+            if (region === 'global' && (!query.hasOwnProperty('region') || query.region !== 'global')) {
+              continue
+            }
+            if (region !== 'global' && query.hasOwnProperty('region') && query.region === 'global') {
+              continue
+            }
             const caller = new AWS[query.service]({ region: region });
             let content = $(tableTemplate);
             content.attr('id', `region-${region}-${query.id}`);
@@ -220,7 +282,7 @@
             button.find('button').attr('aria-controls', `region-${region}-${query.id}`);
             button.find('.title').text(query.title);
             $(`#region-${region}`).append([button, content]);
-            caller[query.api].call(caller, function(err, data) {
+            const tableHandler = function(err, data) {
               if (err) {
                 content.empty()
                 var alert = $('<div class="alert alert-danger show my-2" role="alert"><strong>Error:</strong> '+err.message+'</div>')
@@ -229,11 +291,19 @@
               }
               const information = jmespath.search(data, `${query.jmespath}[]`)
               button.find('.badge').text(information.length)
+              if (information.length > 0) {
+                button.find('.btn-outline-primary').removeClass('btn-outline-primary').addClass('btn-primary')
+              }
               button.find('.spinner').hide()
               button.find('.badge').show()
               content.find('thead').append(createTableHead(query.headings))
               content.find('tbody').append(createTableBody(query.headings, information))
-            })
+            }
+            if (query.hasOwnProperty('params')) {
+              caller[query.api].call(caller, query.params, tableHandler)
+            } else {
+              caller[query.api].call(caller, tableHandler)
+            }
           }
         }
       }
@@ -247,7 +317,8 @@
         ec2.describeRegions(function(err, data) {
           $('#aws-region-tabs').empty()
           $('#aws-inventory').empty()
-          var regions = data.Regions.map(function(r){ return r.RegionName }).sort();
+          let regions = data.Regions.map(function(r){ return r.RegionName }).sort();
+          regions = ["global"].concat(regions);
           window.AWS_REGIONS = regions;
           for (var i=0; i<regions.length; i++) {
             tabs.push( $('<li class="nav-item"><a href="#region-'+regions[i]+'" id="tab-region-'+regions[i]+'" class="nav-link" data-toggle="pill" role="tab">'+regions[i]+'</a></li>') );

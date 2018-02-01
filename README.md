@@ -43,6 +43,14 @@ The table will include the headers described in `headings`, which also use
 JMESPath, like in the example for `State.Name` so that nested elements can be
 references.
 
+## Notes
+
+The AWS JavaScript SDK does not support all the AWS services when used in a
+browser, because not all services have CORS enabled.
+
+The list of CORS supported services is available at
+https://github.com/aws/aws-sdk-js/blob/master/SERVICES.md
+
 ## Contributing
 
 We follow the "fork-and-pull" Git workflow.

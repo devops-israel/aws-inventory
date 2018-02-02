@@ -294,7 +294,7 @@
         },
         {
           service: "Route53Domains",
-          region: "global",
+          region: "us-east-1",
           api: "listDomains",
           title: "Route53 Domains",
           id: "route53domains",
@@ -401,6 +401,9 @@
               continue
             }
             if (region !== 'global' && query.hasOwnProperty('region') && query.region === 'global') {
+              continue
+            }
+            if (query.hasOwnProperty('region') && query.region != region) {
               continue
             }
             const caller = new AWS[query.service]({ region: region });

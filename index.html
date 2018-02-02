@@ -249,7 +249,14 @@
           api: "listStacks",
           title: "CloudFormation Stacks",
           id: "cloudformation-stacks",
-          jmespath: "StackSummaries",
+          jmespath: "StackSummaries[?StackStatus != `DELETE_COMPLETE`]",
+          headings: ["StackId", "StackName", "CreationTime", "LastUpdatedTime", "StackStatus"]
+        },
+        { service: "CloudFormation",
+          api: "listStacks",
+          title: "CloudFormation Stacks [DELETE_COMPLETE]",
+          id: "cloudformation-stacks-deleted",
+          jmespath: "StackSummaries[?StackStatus == `DELETE_COMPLETE`]",
           headings: ["StackId", "StackName", "CreationTime", "LastUpdatedTime", "StackStatus"]
         },
         { service: "CloudFormation",
@@ -283,8 +290,7 @@
           jmespath: "CloudFrontOriginAccessIdentityList.Items",
           headings: ["Id", "S3CanonicalUserId", "Comment"]
         },
-        {
-          service: "Route53",
+        { service: "Route53",
           region: "global",
           api: "listHostedZones",
           title: "Route53",
@@ -292,8 +298,7 @@
           jmespath: "HostedZones",
           headings: ["Id", "Name", "ResourceRecordSetCount", "Config.PrivateZone"]
         },
-        {
-          service: "Route53Domains",
+        { service: "Route53Domains",
           region: "us-east-1",
           api: "listDomains",
           title: "Route53 Domains",
@@ -421,6 +426,13 @@
           jmespath: "Reservations[].Instances",
           headings: ["InstanceId", "InstanceType", "ImageId", "LaunchTime", "KeyName", "State.Name"]
         },
+        // { service: "S3", // CORS doesn't work, although published as supported
+        //   api: "listBuckets",
+        //   title: "S3 Buckets",
+        //   id: "s3-buckets",
+        //   jmespath: "Buckets",
+        //   headings: ["Name", "CreationDate"]
+        // },
       ];
 
       var tableTemplate =

@@ -56,11 +56,19 @@
       border-width: .2em;
     }
   </style>
+  <style>
+    .side-bar {
+      position:sticky;
+      top: 4rem;
+      z-index: 1000;
+      height: calc(100vh - 4rem);
+    }
+  </style>
 </head>
 <body>
   <div class="container-fluid"><!-- container -->
 
-    <div class="navbar navbar-expand-md navbar-light bg-light"><!-- navbar -->
+    <div class="navbar sticky-top navbar-expand-md navbar-light bg-light"><!-- navbar -->
       <a href="#" class="navbar-brand">AWS Inventory</a>
 
       <form id="aws-credentials" role="form" class="form-inline col"><!-- credentials -->
@@ -144,7 +152,7 @@
     <div id="alerts"></div>
 
     <div class="row mt-2">
-      <div class="col-2">
+      <div class="col-2 side-bar">
         <ul id="aws-region-tabs" class="nav flex-sm-column nav-pills" role="tablist" aria-orientation="vertical"></ul><!-- regions -->
       </div>
       <div class="col-10">

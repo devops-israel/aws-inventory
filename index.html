@@ -283,6 +283,23 @@
           jmespath: "CloudFrontOriginAccessIdentityList.Items",
           headings: ["Id", "S3CanonicalUserId", "Comment"]
         },
+        {
+          service: "Route53",
+          region: "global",
+          api: "listHostedZones",
+          title: "Route53",
+          id: "route53",
+          jmespath: "HostedZones",
+          headings: ["Id", "Name", "ResourceRecordSetCount", "Config.PrivateZone"]
+        },
+        {
+          service: "Route53Domains",
+          api: "listDomains",
+          title: "Route53 Domains",
+          id: "route53domains",
+          jmespath: "Domains",
+          headings: ["DomainName", "AutoRenew", "TransferLock", "Expiry"]
+        },
         // -- no CORS for CloudHSMV2 and CloudHSM is deprecated
         // { service: "CloudHSMV2",
         //   api: "describeBackups",

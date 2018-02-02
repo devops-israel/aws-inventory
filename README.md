@@ -51,6 +51,11 @@ browser, because not all services have CORS enabled.
 The list of CORS supported services is available at
 https://github.com/aws/aws-sdk-js/blob/master/SERVICES.md
 
+## S3
+
+S3 does support CORS, however, for the s3 list bucket service to work, please read and follow
+these instruction: [Configuring CORS on S3 Buckets](https://docs.aws.amazon.com/AmazonS3/latest/dev/cors.html).
+
 ## Contributing
 
 We follow the "fork-and-pull" Git workflow.

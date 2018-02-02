@@ -421,6 +421,13 @@
           jmespath: "Reservations[].Instances",
           headings: ["InstanceId", "InstanceType", "ImageId", "LaunchTime", "KeyName", "State.Name"]
         },
+        { service: "S3",
+          api: "listBuckets",
+          title: "S3 Buckets",
+          id: "s3-list-buckets",
+          jmespath: "Buckets[].Name",
+          headings: ["Name"]
+        }
       ];
 
       var tableTemplate =

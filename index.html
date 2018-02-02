@@ -512,6 +512,57 @@
           jmespath: "DeliveryChannelsStatus",
           headings: ["name", "configSnapshotDeliveryInfo.lastStatus", "configHistoryDeliveryInfo.lastStatus", "configStreamDeliveryInfo.lastStatus"]
         },
+        { service: "CUR",
+          region: "us-east-1",
+          api: "describeReportDefinitions",
+          title: "Cost and Usage Report Definitions",
+          id: "cur-report-definitions",
+          jmespath: "ReportDefinitions",
+          headings: ["ReportName", "TimeUnit", "Format", "Compression", "S3Region", "S3Bucket", "S3Prefix", "AdditionalArtifacts[]"]
+        },
+        { service: "DeviceFarm",
+          region: "us-west-2",
+          api: "listProjects",
+          title: "Device Farm Projects",
+          id: "devicefarm-projects",
+          jmespath: "projects",
+          headings: ["arn", "name", "defaultJobTimeoutMinutes", "created"]
+        },
+        { service: "DirectConnect",
+          api: "describeConnections",
+          title: "Direct Connect Connections",
+          id: "direct-connect-connections",
+          jmespath: "connections",
+          headings: ["ownerAccount", "connectionId", "connectionName", "connectionState", "region", "location", "bandwidth", "partnerName", "awsDevice"]
+        },
+        // { service: "DirectConnect", // Only works for authorized Direct Connect partners
+        //   api: "describeInterconnects",
+        //   title: "Direct Connect Interconnects",
+        //   id: "direct-connect-interconnects",
+        //   jmespath: "interconnects",
+        //   headings: ["interconnectId", "interconnectName", "interconnectState", "region", "location", "bandwidth"]
+        // },
+        { service: "DirectConnect",
+          api: "describeLags",
+          title: "Direct Connect Link Aggregations Groups",
+          id: "direct-connect-lags",
+          jmespath: "lags",
+          headings: ["connectionsBandwidth", "numberOfConnections", "lagId", "ownerAccount", "lagName", "lagState", "location", "region", "minimumLinks", "awsDevice"]
+        },
+        { service: "DirectConnect",
+          api: "describeVirtualGateways",
+          title: "Direct Connect Virtual Gateways",
+          id: "direct-connect-virtual-gateways",
+          jmespath: "virtualGateways",
+          headings: ["virtualGatewayId", "virtualGatewayState"]
+        },
+        { service: "DirectConnect",
+          api: "describeVirtualInterfaces",
+          title: "Direct Connect Virtual Interfaces",
+          id: "direct-connect-virtual-interfaces",
+          jmespath: "virtualInterfaces",
+          headings: ["ownerAccount", "virtualInterfaceId", "location", "connectionId", "virtualInterfaceType", "virtualInterfaceName", "amazonAddress", "customerAddress", "virtualInterfaceState"]
+        },
         { service: "ECS",
           api: "describeClusters",
           title: "ECS Clusters",
@@ -615,6 +666,12 @@
                 return false
               }
               const information = jmespath.search(data, `${query.jmespath}[]`)
+              if (!information) {
+                button.find('.badge').removeClass('badge-light').addClass('badge-warning').text('0')
+                button.find('.spinner').hide()
+                button.find('.badge').show()
+                return false
+              }
               button.find('.badge').text(information.length)
               if (information.length > 0) {
                 button.find('.btn-outline-primary').removeClass('btn-outline-primary').addClass('btn-primary')

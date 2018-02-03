@@ -931,7 +931,7 @@
           title: "EC2 VPC Peering Connections",
           id: "ec2-vpc-peering-connections",
           jmespath: "VpcPeeringConnections",
-          headings: ["VpcPeeringConnectionId", "AccepterVpcInfo.VpcId", "AccepterVpcInfo.Region", "RequesterVpcInfo.VpcId", "RequesterVpcInfo.Region", "ExpirationTime", "Status", "Tags[?Key=='Name'].Value[]"]
+          headings: ["VpcPeeringConnectionId", "AccepterVpcInfo.VpcId", "AccepterVpcInfo.Region", "RequesterVpcInfo.VpcId", "RequesterVpcInfo.Region", "ExpirationTime", "Status.Code", "Tags[?Key=='Name'].Value[]"]
         },
         { service: "EC2",
           api: "describeVpcs",

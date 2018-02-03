@@ -185,6 +185,7 @@
           headings: ["DomainName", "CertificateArn"]
         },
         { service: "APIGateway",
+          skip_regions: ['ap-northeast-1', 'ap-northeast-2', 'ap-south-1', 'ca-central-1'],
           api: "getRestApis",
           title: "API Gateway REST APIs",
           id: "apigw-rest-apis",
@@ -414,6 +415,7 @@
           headings: ["policyName", "lastUpdatedTime", "policyDocument"]
         },
         { service: "CodeCommit",
+          skip_regions: ['eu-west-3'],
           api: "listRepositories",
           title: "CodeCommit Repositories",
           id: "codecommit-repositories",
@@ -442,6 +444,7 @@
           headings: ["Name"]
         },
         { service: "CodePipeline",
+          skip_regions: ['eu-west-3'],
           api: "listPipelines",
           title: "CodePipeline Pipelines",
           id: "codepipeline-pipelines",
@@ -449,6 +452,7 @@
           headings: ["name", "version", "created", "updated"]
         },
         { service: "CognitoIdentity",
+          skip_regions: ['ca-central-1', 'eu-west-3', 'sa-east-1', 'us-west-1', 'us-east-2'],
           params: { MaxResults: 60 },
           api: "listIdentityPools",
           title: "Cognito Identity Pools",
@@ -457,6 +461,7 @@
           headings: ["IdentityPoolId", "IdentityPoolName"]
         },
         { service: "CognitoIdentityServiceProvider",
+          skip_regions: ['ca-central-1', 'eu-west-3', 'sa-east-1', 'us-west-1', 'us-east-2'],
           params: { MaxResults: 60 },
           api: "listUserPools",
           title: "Cognito User Pools",
@@ -465,6 +470,7 @@
           headings: ["Id", "Name", "Status", "LastModifiedDate", "CreationDate"]
         },
         { service: "CognitoSync",
+          skip_regions: ['ca-central-1', 'eu-west-3', 'sa-east-1', 'us-west-1', 'us-east-2'],
           api: "listIdentityPoolUsage",
           title: "Cognito Sync Identity Pool Usage",
           id: "cognitosync-identity-pool-usage",
@@ -572,6 +578,7 @@
           headings: ["ownerAccount", "virtualInterfaceId", "location", "connectionId", "virtualInterfaceType", "virtualInterfaceName", "amazonAddress", "customerAddress", "virtualInterfaceState"]
         },
         { service: "DynamoDB",
+          skip_regions: ['ap-southeast-2', 'ap-southeast-1', 'ap-south-1', 'ap-northeast-2', 'ap-northeast-1', 'eu-central-1', 'eu-west-3', 'eu-west-2', 'ca-central-1', 'us-west-1', 'sa-east-1'],
           api: "listBackups",
           title: "DynamoDB Backups",
           id: "dynamodb-backups",
@@ -579,6 +586,7 @@
           headings: ["TableName", "TableId", "BackupArn", "BackupName", "BackupCreationDateTime", "BackupStatus", "BackupSizeBytes"]
         },
         { service: "DynamoDB",
+          skip_regions: ['ap-southeast-2', 'ap-southeast-1', 'ap-south-1', 'ap-northeast-2', 'ap-northeast-1', 'eu-central-1', 'eu-west-3', 'eu-west-2', 'ca-central-1', 'us-west-1', 'sa-east-1'],
           api: "listGlobalTables",
           title: "DynamoDB Global Tables",
           id: "dynamodb-global-tables",
@@ -622,6 +630,7 @@
           headings: ["BundleId", "BundleTaskError.Message", "InstanceId", "Progress", "StartTime", "State", "Storage", "UpdateTime"]
         },
         { service: "EC2",
+          skip_regions: ['ap-northeast-1', 'ap-northeast-2', 'ap-south-1', 'ca-central-1', 'us-east-2', 'eu-west-2', 'eu-west-3', 'eu-central-1'],
           api: "describeClassicLinkInstances",
           title: "EC2 ClassicLink Instances",
           id: "ec2-classiclink-instances",
@@ -657,6 +666,7 @@
           headings: ["EgressOnlyInternetGatewayId", "Attachments[].State"]
         },
         { service: "EC2",
+          skip_regions: ['ap-northeast-1', 'ap-northeast-2', 'ap-south-1', 'sa-east-1', 'us-west-1', 'ca-central-1', 'eu-west-2', 'eu-west-3'],
           api: "describeElasticGpus",
           title: "EC2 Elastic GPUs",
           id: "ec2-elastic-gpus",
@@ -741,6 +751,7 @@
           headings: ["LaunchTemplateId", "LaunchTemplateName", "CreateTime", "CreatedBy", "Tags[?Key=='Name'].Value[]"]
         },
         { service: "EC2",
+          skip_regions: ['ap-northeast-1', 'ap-northeast-2', 'ap-south-1', 'ca-central-1', 'us-east-2', 'eu-west-2', 'eu-west-3', 'eu-central-1'],
           api: "describeMovingAddresses",
           title: "EC2 Classic<->VPC Moving Elastic IPs",
           id: "ec2-moving-addresses",
@@ -804,6 +815,8 @@
           headings: ["RouteTableId", "VpcId", "Associations.Main", "Associations.SubnetId", "Tags[?Key=='Name'].Value[]"]
         },
         { service: "EC2",
+          region: 'us-east-1',
+          skip_regions: ['ap-northeast-1', 'ap-northeast-2', 'ap-south-1', 'sa-east-1', 'us-west-1', 'ca-central-1', 'us-east-2', 'eu-west-2', 'eu-west-3', 'ap-sourtheast-1', 'ap-southeast-2', 'eu-central-1'],
           api: "describeScheduledInstances",
           title: "EC2 Scheduled Instances",
           id: "ec2-scheduled-instances",
@@ -867,6 +880,7 @@
           headings: ["VolumeId", "ModificationState", "StatusMessage", "TargetSize", "TargetIops", "TargetVolumeType", "OriginalSize", "OriginalIops", "OriginalVolumeType", "Progress", "StartTime", "EndTime"]
         },
         { service: "EC2",
+          skip_regions: ['ap-northeast-1', 'ap-northeast-2', 'ap-south-1', 'ca-central-1', 'us-east-2', 'eu-west-2', 'eu-west-3', 'eu-central-1'],
           api: "describeVpcClassicLink",
           title: "EC2 VPC ClassicLink",
           id: "ec2-vpc-classiclink",
@@ -874,6 +888,7 @@
           headings: ["VpcId", "ClassicLinkEnabled", "Tags[?Key=='Name'].Value[]"]
         },
         { service: "EC2",
+          skip_regions: ['ap-northeast-1', 'ap-northeast-2', 'ap-south-1', 'ca-central-1', 'us-east-2', 'eu-west-2', 'eu-west-3', 'eu-central-1'],
           api: "describeVpcClassicLinkDnsSupport",
           title: "EC2 VPC ClassicLink DNS Support",
           id: "ec2-vpc-classiclink-dns-support",
@@ -881,6 +896,7 @@
           headings: ["VpcId", "ClassicLinkDnsSupported"]
         },
         { service: "EC2",
+          skip_regions: ['eu-west-3'],
           api: "describeVpcEndpointConnectionNotifications",
           title: "EC2 VPC Endpoint Connection Notifications",
           id: "ec2-vpc-endpoint-connection-notifications",
@@ -888,6 +904,7 @@
           headings: ["ConnectionNotificationId", "ServiceId", "VpcEndpointId", "ConnectionNotificationArn", "ConnectionEvents", "ConnectionNotificationState"]
         },
         { service: "EC2",
+          skip_regions: ['eu-west-3'],
           api: "describeVpcEndpointConnections",
           title: "EC2 VPC Endpoint Connections",
           id: "ec2-vpc-endpoint-connections",
@@ -902,6 +919,7 @@
           headings: ["VpcEndpointId", "VpcEndpointType", "VpcId", "ServiceName", "State", "CreationTimestamp"]
         },
         { service: "EC2",
+          skip_regions: ['eu-west-3'],
           api: "describeVpcEndpointServiceConfigurations",
           title: "EC2 VPC Endpoint Service Configurations",
           id: "ec2-vpc-endpoint-service-configs",
@@ -937,6 +955,13 @@
           headings: ["VpnGatewayId", "AvailabilityZone", "State", "Type", "AmazonSideAsn", "Tags[?Key=='Name'].Value[]"]
         },
         // end ec2
+        { service: "ECR",
+          api: "describeRepositories",
+          title: "ECR Repositories",
+          id: "ecr-repositories",
+          jmespath: "repositories",
+          headings: ["registryId", "repositoryName", "createdAt", "repositoryUri", "repositoryArn"]
+        },
         { service: "ECS",
           api: "describeClusters",
           title: "ECS Clusters",
@@ -954,28 +979,21 @@
       ];
 
       var tableTemplate =
-      `<div class="collapse" data-parent="#aws-inventory">
-        <div class="card-body">
-          <code>
-            <table class="table table-bordered table-hover table-sm">
-              <thead class="thead-light"></thead>
-              <tbody></tbody>
-            </table>
-          </code>
-        </div>
-      </div>`;
+      `<div class="mb-1 col-12 collapse" data-parent="#aws-inventory">
+        <code>
+          <table class="table table-bordered table-hover table-sm">
+            <thead class="thead-light"></thead>
+            <tbody></tbody>
+          </table>
+        </code>
+      </div>`
 
       var serviceButton =
-      `<div class="card">
-        <div class="card-header">
-          <button class="btn btn-outline-primary" data-toggle="collapse" aria-expanded="false">
-            <span class="spinner spinner-border spinner-border-sm"></span><span class="badge badge-light" style="display:none">?</span>
-          </button>
-          <button class="btn btn-outline-primary" data-toggle="collapse" aria-expanded="false">
-            <span class="title"></span>
-          </button>
-        </div>
-      </div>`
+      `<a href="#" class="btn btn-sm btn-light col col-12 text-left mb-1" data-toggle="collapse" aria-expanded="false">
+        <span class="spinner spinner-border spinner-border-sm"></span>
+        <span class="counter badge badge-light" style="display:none">?</span>
+        &nbsp;<span class="title"></a>
+      </a>`
 
       function createTableHead(headings) {
         const tr = $('<tr></tr>')
@@ -1005,48 +1023,53 @@
           for (let q=0; q<awsQueries.length; q++) {
             const query = awsQueries[q]
             if (region === 'global' && (!query.hasOwnProperty('region') || query.region !== 'global')) {
-              continue
+              continue // show only global resources on global tab
             }
             if (region !== 'global' && query.hasOwnProperty('region') && query.region === 'global') {
-              continue
+              continue // do not show global resources in other regions
             }
             if (query.hasOwnProperty('region') && query.region != region) {
-              continue
+              continue // restrict to specific region only
+            }
+            if (query.hasOwnProperty('skip_regions') && query.skip_regions.includes(region)) {
+              continue // skip specified regions
             }
             const caller = new AWS[query.service]({ region: region });
             let content = $(tableTemplate);
             content.attr('id', `region-${region}-${query.id}`);
             let button = $(serviceButton);
             button.attr('id', `btn-region-${region}-${query.id}`)
-            button.find('button').attr('data-target', `#region-${region}-${query.id}`);
-            button.find('button').attr('aria-controls', `region-${region}-${query.id}`);
+            button.attr('data-target', `#region-${region}-${query.id}`);
+            button.attr('aria-controls', `region-${region}-${query.id}`);
             button.find('.title').text(query.title);
             $(`#region-${region}`).append([button, content]);
+            const showCounter = function(text) {
+              button.find('.counter').text(text)
+              button.find('.spinner').hide()
+              button.find('.counter').show()
+            }
             const tableHandler = function(err, data) {
               if (err) {
                 content.empty()
                 var alert = $('<div class="alert alert-danger show my-2" role="alert"><strong>Error:</strong> '+err.message+'</div>')
                 content.append(alert);
-                button.find('.badge').removeClass('badge-light').addClass('badge-danger').text('X')
-                button.find('.spinner').hide()
-                button.find('.badge').show()
+                button.removeClass('btn-light').addClass('btn-warning')
+                showCounter('X')
                 return false
               }
               const information = jmespath.search(data, `${query.jmespath}[]`)
               if (!information) {
-                button.find('.badge').removeClass('badge-light').addClass('badge-warning').text('0')
-                button.find('.spinner').hide()
-                button.find('.badge').show()
+                button.removeClass('btn-light').addClass('btn-warning')
+                showCounter('0')
                 return false
               }
-              button.find('.badge').text(information.length)
               if (information.length > 0) {
-                button.find('.btn-outline-primary').removeClass('btn-outline-primary').addClass('btn-primary')
+                // button.find('.btn-outline-primary').removeClass('btn-outline-primary').addClass('btn-primary')
+                button.removeClass('btn-light').addClass('btn-primary')
                 content.find('thead').append(createTableHead(query.headings))
                 content.find('tbody').append(createTableBody(query.headings, information))
               }
-              button.find('.spinner').hide()
-              button.find('.badge').show()
+              showCounter(information.length)
             }
             if (query.hasOwnProperty('params')) {
               caller[query.api].call(caller, query.params, tableHandler)

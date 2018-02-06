@@ -1009,14 +1009,11 @@
         for (d=0; d<data.length; d++) {
           const tr = $('<tr></tr>')
           tr.append($(`<td class="text-center">${d + 1}</td>`))
-
           for (let h=0; h<headings.length; h++) {
             tr.append($(`<td>${jmespath.search(data[d], headings[h])}</td>`))
           }
-
           rows.push(tr)
         }
-
         return rows
       }
 

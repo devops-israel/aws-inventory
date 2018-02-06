@@ -1265,14 +1265,15 @@
           hideAll()
         }
         if (showEmpty == "showEmpty") {
-          $('div.card').show();
+          $('a.btn').show();
         } else {
-          $('div.card:has(.btn.btn-outline-primary)').hide();
+          $('a.btn.btn-light').hide();
+          $('a.btn.btn-warning').hide();
         }
         if (expandAll == "expandAll") {
-          $('div.card:not(div.card:has(.btn.btn-outline-primary))+div').show();
+          $('a:not(a.btn.btn-light)+div').show();
         } else {
-          $('div.card:not(div.card:has(.btn.btn-outline-primary))+div').css('display','');
+          $('a:not(a.btn.btn-light)+div').css('display','');
         }
       }
 

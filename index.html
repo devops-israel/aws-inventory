@@ -1288,28 +1288,20 @@
       }
       $('#modal-save').on('click', saveOptions);
       $('#optionsModal').on('shown.bs.modal', function () {
-        console.debug("Options modal opened");
         if (typeof(Storage) !== "undefined") {
-          console.debug("Code for localStorage/sessionStorage.");
           if (localStorage.getItem("showRegions") == null || localStorage.getItem("showRegions") == "undefined") {
-            console.debug($('input[name=optionsRegions]:checked').attr('id'));
             localStorage.setItem("showRegions",$('input[name=optionsRegions]:checked').attr('id'));
           } else {
-            console.debug(localStorage.getItem("showRegions"));
             $('#'+localStorage.getItem("showRegions")).click()
           }
           if (localStorage.getItem("showEmpty") == null || localStorage.getItem("showEmpty") == "undefined") {
-            console.debug($('input[name=optionsEmpty]:checked').attr('id'));
             localStorage.setItem("showEmpty",$('input[name=optionsEmpty]:checked').attr('id'));
           } else {
-            console.debug(localStorage.getItem("showEmpty"));
             $('#'+localStorage.getItem("showEmpty")).click()
           }
           if (localStorage.getItem("expandAll") == null || localStorage.getItem("expandAll") == "undefined") {
-            console.debug($('input[name=optionsExpand]:checked').attr('id'));
             localStorage.setItem("expandAll",$('input[name=optionsExpand]:checked').attr('id'));
           } else {
-            console.debug(localStorage.getItem("expandAll"));
             $('#'+localStorage.getItem("expandAll")).click()
           }
         } else {

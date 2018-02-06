@@ -1,4 +1,4 @@
-<!doctype html>
+doctype html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
@@ -963,11 +963,11 @@
           headings: ["registryId", "repositoryName", "createdAt", "repositoryUri", "repositoryArn"]
         },
         { service: "ECS",
-          api: "describeClusters",
+          api: "listClusters",
           title: "ECS Clusters",
           id: "ecs-clusters",
-          jmespath: "clusters",
-          headings: ["clusterName", "status", "registeredContainerInstancesCount", "runningTasksCount", "pendingTasksCount", "activeServicesCount", "failures[].reason"]
+          jmespath: "clusterArns",
+          headings: ["List"]
         },
         // { service: "S3", // CORS doesn't work, although published as supported
         //   api: "listBuckets",
@@ -998,21 +998,37 @@
       function createTableHead(headings) {
         const tr = $('<tr></tr>')
         tr.append($('<th class="text-center">#</th>'))
-        for (let h=0; h<headings.length; h++) {
-          tr.append($(`<th>${headings[h]}</th>`))
+        if (headings.length == 0) {
+          tr.append($(`<th>"List"</th>`))
+        } else {
+          for (let h=0; h<headings.length; h++) {
+            tr.append($(`<th>${headings[h]}</th>`))
+          }
         }
         return tr
       }
 
       function createTableBody(headings, data) {
         const rows = []
-        for (d=0; d<data.length; d++) {
-          const tr = $('<tr></tr>')
-          tr.append($(`<td class="text-center">${d + 1}</td>`))
-          for (let h=0; h<headings.length; h++) {
-            tr.append($(`<td>${jmespath.search(data[d], headings[h])}</td>`))
+        if (headings[0] == "List") {
+          for (d=0; d<data.length; d++) {
+            const tr = $('<tr></tr>')
+            tr.append($(`<td class="text-center">${d + 1}</td>`))
+            tr.append($(`<td>${data[d]}</td>`))
+            rows.push(tr)
           }
-          rows.push(tr)
+        } else {
+          for (d=0; d<data.length; d++) {
+            const tr = $('<tr></tr>')
+            tr.append($(`<td class="text-center">${d + 1}</td>`))
+
+            for (let h=0; h<headings.length; h++) {
+              tr.append($(`<td>${jmespath.search(data[d], headings[h])}</td>`))
+            }
+
+            rows.push(tr)
+          }
+
         }
         return rows
       }

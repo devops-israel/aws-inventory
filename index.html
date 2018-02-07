@@ -963,11 +963,11 @@
           headings: ["registryId", "repositoryName", "createdAt", "repositoryUri", "repositoryArn"]
         },
         { service: "ECS",
-          api: "describeClusters",
+          api: "listClusters",
           title: "ECS Clusters",
           id: "ecs-clusters",
-          jmespath: "clusters",
-          headings: ["clusterName", "status", "registeredContainerInstancesCount", "runningTasksCount", "pendingTasksCount", "activeServicesCount", "failures[].reason"]
+          jmespath: "map(&{Name:@}, clusterArns)", 
+          headings: ["Name"]
         },
         // { service: "S3", // CORS doesn't work, although published as supported
         //   api: "listBuckets",

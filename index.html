@@ -1470,9 +1470,9 @@
           $('a.btn.btn-warning').hide();
         }
         if (expandAll == "expandAll") {
-          $('a:not(a.btn.btn-light)+div').show();
+          $('a:not(.btn-light,.btn-warning)+div').show();
         } else {
-          $('a:not(a.btn.btn-light)+div').css('display','');
+          $('a:not(.btn-light,.btn-warning)+div').css('display','');
         }
       }
 

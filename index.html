@@ -999,7 +999,12 @@
         const tr = $('<tr></tr>')
         tr.append($('<th class="text-center">#</th>'))
         for (let h=0; h<headings.length; h++) {
-          tr.append($(`<th>${headings[h]}</th>`))
+          if (typeof headings[h] === 'string') {
+            tr.append($(`<th>${headings[h]}</th>`))
+          } else {
+            tr.append($(`<th>${Object.keys(headings[h])[0]}</th>`))
+          }
+
         }
         return tr
       }
@@ -1010,7 +1015,11 @@
           const tr = $('<tr></tr>')
           tr.append($(`<td class="text-center">${d + 1}</td>`))
           for (let h=0; h<headings.length; h++) {
-            tr.append($(`<td>${jmespath.search(data[d], headings[h])}</td>`))
+            if (typeof headings[h] === 'string') {
+              tr.append($(`<td>${jmespath.search(data[d], headings[h])}</td>`))
+            } else {
+              tr.append($(`<td>${jmespath.search(data[d], Object.values(headings[h])[0])}</td>`))
+            }
           }
           rows.push(tr)
         }

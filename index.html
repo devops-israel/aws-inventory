@@ -1013,7 +1013,7 @@
           title: "ElastiCache Clusters",
           id: "elasticache-cache-clusters",
           jmespath: "CacheClusters",
-          headings: ["CAcheClusterId", {"Address": "ConfigurationEndpoint.Address"}, {"Port": "ConfigurationEndpoint.Port"}, "CacheNodeType", "Engine", "EngineVersion", "CacheClusterStatus", "NumCacheNodes", "PreferredAvailabilityZone", "CacheClusterCreateTime"]
+          headings: ["CacheClusterId", {"Cfg.Address": "ConfigurationEndpoint.Address"}, {"Cfg.Port": "ConfigurationEndpoint.Port"}, "CacheNodeType", "Engine", "EngineVersion", "CacheClusterStatus", "NumCacheNodes", "PreferredAvailabilityZone", "CacheClusterCreateTime"]
         },
         { service: "ElastiCache",
           api: "describeCacheParameterGroups",
@@ -1054,9 +1054,101 @@
           api: "describeSnapshots",
           title: "ElastiCache Snapshots",
           id: "elasticache-snapshots",
-          jmespath: "",
-          headings: ["ReservedCacheNodeId", "ReservedCacheNodesOfferingId", "CacheNodeType", "StartTime", "Duration", "FixedPrice", "UsagePrice", "CacheNodeCount", "ProductDescription", "OfferingType", "State"]
+          jmespath: "Snapshots",
+          headings: ["SnapshotName", "ReplicationGroupId", "ReplicationGroupDescription", "CacheClusterId", "SnapshotStatus", "SnapshotSource", "CacheNodeType", "Engine", "EngineVersion", "NumCacheNodes"]
         },
+        { service: "ElasticBeanstalk",
+          api: "describeApplications",
+          title: "ElasticBeanstalk Applications",
+          id: "elasticbeanstalk-applications",
+          jmespath: "Applications",
+          headings: ["ApplicationName", "DateCreated", "Description"]
+        },
+        { service: "ElasticBeanstalk",
+          api: "describeApplicationVersions",
+          title: "ElasticBeanstalk Application Versions",
+          id: "elasticbeanstalk-application-versions",
+          jmespath: "ApplicationVersions",
+          headings: ["ApplicationName", "DateCreated", "DateUpdated", "Description", "VersionLabel", "SourceBundle.S3Bucket", "SourceBundle.S3Key"]
+        },
+        { service: "ElasticBeanstalk",
+          api: "describeEnvironments",
+          title: "ElasticBeanstalk Environments",
+          id: "elasticbeanstalk-environments",
+          jmespath: "Environments",
+          headings: ["EnvironmentName", "EnvironmentId", "ApplicationName", "VersionLabel", "SolutionStackName", "Description", "DateCreated", "Status", "Health", "HealthStatus"]
+        },
+        // { service: "ElasticBeanstalk",
+        //   api: "listPlatformVersions", // platforms offered by AWS, not real inventory
+        //   title: "ElasticBeanstalk Platform Versions",
+        //   id: "elasticbeanstalk-platform-versions",
+        //   jmespath: "PlatformSummaryList",
+        //   headings: ["PlatformOwner", "PlatformStatus", "PlatformCategory", "OperatingSystemName", "OperatingSystemVersion"]
+        // },
+        { service: "ELB",
+          api: "describeAccountLimits",
+          title: "Classic ELB Account Limits",
+          id: "elb-account-limits",
+          jmespath: "Limits",
+          headings: ["Name", "Max"]
+        },
+        { service: "ELB",
+          api: "describeLoadBalancerPolicyTypes",
+          title: "Classic ELB Policy Types",
+          id: "elb-policy-types",
+          jmespath: "PolicyTypeDescriptions",
+          headings: ["PolicyTypeName", "Description"]
+        },
+        { service: "ELB",
+          api: "describeLoadBalancerPolicies",
+          title: "Classic ELB Policies",
+          id: "elb-policies",
+          jmespath: "PolicyDescriptions",
+          headings: ["PolicyTypeName", "PolicyName"]
+        },
+        { service: "ELB",
+          api: "describeLoadBalancers",
+          title: "Classic ELB Load Balancers",
+          id: "elb-load-balancers",
+          jmespath: "LoadBalancerDescriptions",
+          headings: ["LoadBalancerName", "AvailabilityZones[]", "VPCId", "Subnets[]", "CreatedTime", "Scheme"]
+        },
+        { service: "ELBv2",
+          api: "describeAccountLimits",
+          title: "ELB v2 Account Limits",
+          id: "elbv2-account-limits",
+          jmespath: "Limits",
+          headings: ["Name", "Max"]
+        },
+        { service: "ELBv2",
+          api: "describeLoadBalancers",
+          title: "ELB v2 Load Balancers",
+          id: "elbv2-load-balancers",
+          jmespath: "LoadBalancers",
+          headings: ["LoadBalancerName", "Type", "Scheme", "VpcId", "State", "AvailabilityZones[].ZoneName", "AvailabilityZones[].SubnetId", "IpAddressType"]
+        },
+        { service: "ELBv2",
+          api: "describeSSLPolicies",
+          title: "ELB v2 SSL Policies",
+          id: "elbv2-ssl-policies",
+          jmespath: "SslPolicies",
+          headings: ["Name", "SslProtocols[]"]
+        },
+        { service: "ELBv2",
+          api: "describeTargetGroups",
+          title: "ELB v2 Target Groups",
+          id: "elbv2-target-groups",
+          jmespath: "TargetGroups",
+          headings: ["TargetGroupName", "VpcId", "Protocol", "Port", "HealthCheckProtocol", "HealthCheckPort", "HealthCheckPath", "HealthCheckIntervalSeconds", "UnhealthyThresholdCount"]
+        },
+        { service: "ELBv2",
+          api: "describeTargetHealth",
+          title: "ELB v2 Target Health",
+          id: "elbv2-target-health",
+          jmespath: "TargetHealthDescriptions",
+          headings: ["Target.Id", "TargetHealth.State", "TargetHealth.Reason", "TargetHealth.Description"]
+        },
+
         // { service: "S3", // CORS doesn't work, although published as supported
         //   api: "listBuckets",
         //   title: "S3 Buckets",

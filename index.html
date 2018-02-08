@@ -281,7 +281,7 @@
           title: "CloudFront Distributions",
           id: "cloudfront-distribution",
           jmespath: "DistributionList.Items",
-          headings: ["Id", "Status", "DomainName", "LastModifiedTime", "Origins.Items[].DomainName"]
+          headings: ["Id", "Status", "DomainName", "LastModifiedTime", {"DomainName(s)": "Origins.Items[].DomainName"}]
         },
         { service: "CloudFront",
           region: "global",
@@ -289,7 +289,7 @@
           title: "CloudFront Streaming Distributions",
           id: "cloudfront-streaming-distribution",
           jmespath: "StreamingDistributionList.Items",
-          headings: ["Id", "Status", "DomainName", "LastModifiedTime", "S3Origin.DomainName", "Aliases.Items[]"]
+          headings: ["Id", "Status", "DomainName", "LastModifiedTime", "S3Origin.DomainName", {"Aliases": "Aliases.Items[]"}]
         },
         { service: "CloudFront",
           region: "global",
@@ -613,7 +613,7 @@
           title: "EC2 Elastic IP Addresses",
           id: "ec2-eips",
           jmespath: "Addresses",
-          headings: ["InstanceId", "PublicIp", "AllocationId", "AssociationId", "Domain", "NetworkInterfaceId", "NetworkInterfaceOwnerId", "PrivateIpAddress", "Tags[?Key=='Name'].Value[]"]
+          headings: ["InstanceId", "PublicIp", "AllocationId", "AssociationId", "Domain", "NetworkInterfaceId", "NetworkInterfaceOwnerId", "PrivateIpAddress", {"Tag:Name": "Tags[?Key=='Name'].Value[]"}]
         },
         { service: "EC2",
           api: "describeAvailabilityZones",
@@ -635,28 +635,28 @@
           title: "EC2 ClassicLink Instances",
           id: "ec2-classiclink-instances",
           jmespath: "Instances",
-          headings: ["InstanceId", "VpcId", "Tags[?Key=='Name'].Value[]"]
+          headings: ["InstanceId", "VpcId", {"Tag:Name": "Tags[?Key=='Name'].Value[]"}]
         },
         { service: "EC2",
           api: "describeConversionTasks",
           title: "EC2 Import/Export Conversion Tasks",
           id: "ec2-coversion-tasks",
           jmespath: "ConversionTasks",
-          headings: ["ConversionTaskId", "ExpirationTime", "ImportInstance.Description", "ImportInstance.InstanceId", "State", "StatusMessage", "Tags[?Key=='Name'].Value[]"]
+          headings: ["ConversionTaskId", "ExpirationTime", "ImportInstance.Description", "ImportInstance.InstanceId", "State", "StatusMessage", {"Tag:Name": "Tags[?Key=='Name'].Value[]"}]
         },
         { service: "EC2",
           api: "describeCustomerGateways",
           title: "EC2 VPC Customer Gateways",
           id: "ec2-customer-gateways",
           jmespath: "CustomerGateways",
-          headings: ["BgpAsn", "CustomerGatewayId", "IpAddress", "State", "Type", "Tags[?Key=='Name'].Value[]"]
+          headings: ["BgpAsn", "CustomerGatewayId", "IpAddress", "State", "Type", {"Tag:Name": "Tags[?Key=='Name'].Value[]"}]
         },
         { service: "EC2",
           api: "describeDhcpOptions",
           title: "EC2 VPC DHCP Options",
           id: "ec2-dhcp-options",
           jmespath: "DhcpOptions",
-          headings: ["DhcpOptionsId", "Tags[?Key=='Name'].Value[]"]
+          headings: ["DhcpOptionsId", {"Tag:Name": "Tags[?Key=='Name'].Value[]"}]
         },
         { service: "EC2",
           api: "describeEgressOnlyInternetGateways",
@@ -727,14 +727,14 @@
           title: "EC2 Instances",
           id: "ec2-instances",
           jmespath: "Reservations[].Instances",
-          headings: ["InstanceId", "InstanceType", "ImageId", "LaunchTime", "KeyName", "State.Name", "Tags[?Key=='Name'].Value[]"]
+          headings: ["InstanceId", "InstanceType", "ImageId", "LaunchTime", "KeyName", "State.Name", {"Tag:Name": "Tags[?Key=='Name'].Value[]"}]
         },
         { service: "EC2",
           api: "describeInternetGateways",
           title: "EC2 VPC Internet Gateways",
           id: "ec2-internet-gateways",
           jmespath: "InternetGateways",
-          headings: ["InternetGatewayId", "Attachments[].State", "Tags[?Key=='Name'].Value[]"]
+          headings: ["InternetGatewayId", "Attachments[].State", {"Tag:Name": "Tags[?Key=='Name'].Value[]"}]
         },
         { service: "EC2",
           api: "describeKeyPairs",
@@ -748,7 +748,7 @@
           title: "EC2 Launch Templates",
           id: "ec2-launch-templates",
           jmespath: "LaunchTemplates",
-          headings: ["LaunchTemplateId", "LaunchTemplateName", "CreateTime", "CreatedBy", "Tags[?Key=='Name'].Value[]"]
+          headings: ["LaunchTemplateId", "LaunchTemplateName", "CreateTime", "CreatedBy", {"Tag:Name": "Tags[?Key=='Name'].Value[]"}]
         },
         { service: "EC2",
           skip_regions: ['ap-northeast-1', 'ap-northeast-2', 'ap-south-1', 'ca-central-1', 'us-east-2', 'eu-west-2', 'eu-west-3', 'eu-central-1'],
@@ -763,21 +763,21 @@
           title: "EC2 VPC NAT Gateways",
           id: "ec2-nat-gateways",
           jmespath: "NatGateways",
-          headings: ["NatGatewayId", "NatGatewayAddresses.PublicIp", "NatGatewayAddresses.PrivateIp", "CreateTime", "DeleteTime", "FailureCode", "State", "VpcId", "Tags[?Key=='Name'].Value[]"]
+          headings: ["NatGatewayId", "NatGatewayAddresses.PublicIp", "NatGatewayAddresses.PrivateIp", "CreateTime", "DeleteTime", "FailureCode", "State", "VpcId", {"Tag:Name": "Tags[?Key=='Name'].Value[]"}]
         },
         { service: "EC2",
           api: "describeNetworkAcls",
           title: "EC2 VPC Network ACLs",
           id: "ec2-network-acls",
           jmespath: "NetworkAcls",
-          headings: ["NetworkAclId", "Associations.SubnetId", "IsDefault", "Entries.RuleNumber", "Entries.RuleAction", "Entries.CidrBlock", "Entries.PortRange", "Entries.Egress", "Tags[?Key=='Name'].Value[]"]
+          headings: ["NetworkAclId", "Associations.SubnetId", "IsDefault", "Entries.RuleNumber", "Entries.RuleAction", "Entries.CidrBlock", "Entries.PortRange", "Entries.Egress", {"Tag:Name": "Tags[?Key=='Name'].Value[]"}]
         },
         { service: "EC2",
           api: "describeNetworkInterfaces",
           title: "EC2 Network Interfaces",
           id: "ec2-network-interfaces",
           jmespath: "NetworkInterfaces",
-          headings: ["NetworkInterfaceId", "Description", "AvailabilityZone", "InterfaceType", "SourceDestCheck", "Status", "TagSet[?Key=='Name'].Value[]"]
+          headings: ["NetworkInterfaceId", "Description", "AvailabilityZone", "InterfaceType", "SourceDestCheck", "Status", {"Tag:Name": "TagSet[?Key=='Name'].Value[]"}]
         },
         { service: "EC2",
           api: "describePlacementGroups",
@@ -791,14 +791,14 @@
           title: "EC2 Reserved Instances",
           id: "ec2-reserved-instances",
           jmespath: "ReservedInstances",
-          headings: ["ReservedInstancesId", "AvailabilityZone", "Duration", "Start", "End", "FixedPrice", "InstanceCount", "InstanceType", "ProductDescription", "State", "UsagePrice", "InstanceTenancy", "OfferingClass", "OfferingType", "Scope", "Tags[?Key=='Name'].Value[]"]
+          headings: ["ReservedInstancesId", "AvailabilityZone", "Duration", "Start", "End", "FixedPrice", "InstanceCount", "InstanceType", "ProductDescription", "State", "UsagePrice", "InstanceTenancy", "OfferingClass", "OfferingType", "Scope", {"Tag:Name": "Tags[?Key=='Name'].Value[]"}]
         },
         // { service: "EC2",
         //   api: "describeReservedInstancesListings",
         //   title: "EC2 Reserved Instance Marketplace Listings",
         //   id: "ec2-reserved-instance-marketplace-listings",
         //   jmespath: "ReservedInstancesListings",
-        //   headings: ["ReservedInstancesListingId", "CreateDate", "InstanceCounts.InstanceCount", "InstanceCounts.State", "Status", "StatusMessage", "Tags[?Key=='Name'].Value[]"]
+        //   headings: ["ReservedInstancesListingId", "CreateDate", "InstanceCounts.InstanceCount", "InstanceCounts.State", "Status", "StatusMessage", {"Tag:Name": "Tags[?Key=='Name'].Value[]"}]
         // },
         { service: "EC2",
           api: "describeReservedInstancesModifications",
@@ -812,7 +812,7 @@
           title: "EC2 VPC Route Tables",
           id: "ec2-route-tables",
           jmespath: "RouteTables",
-          headings: ["RouteTableId", "VpcId", "Associations.Main", "Associations.SubnetId", "Tags[?Key=='Name'].Value[]"]
+          headings: ["RouteTableId", "VpcId", "Associations.Main", "Associations.SubnetId", {"Tag:Name": "Tags[?Key=='Name'].Value[]"}]
         },
         { service: "EC2",
           region: 'us-east-1',
@@ -828,14 +828,14 @@
           title: "EC2 Security Groups",
           id: "ec2-security-groups",
           jmespath: "SecurityGroups",
-          headings: ["GroupId", "GroupName", "Description", "VpcId", "Tags[?Key=='Name'].Value[]"]
+          headings: ["GroupId", "GroupName", "Description", "VpcId", {"Tag:Name": "Tags[?Key=='Name'].Value[]"}]
         },
         // { service: "EC2",
         //   api: "describeSnapshots",
         //   title: "EC2 EBS Snapshots",
         //   id: "ec2-ebs-snapshots",
         //   jmespath: "Snapshots",
-        //   headings: ["SnapshotId", "Description", "Encrypted", "State", "StateMessage", "VolumeId", "VolumeSize", "Tags[?Key=='Name'].Value[]"]
+        //   headings: ["SnapshotId", "Description", "Encrypted", "State", "StateMessage", "VolumeId", "VolumeSize", {"Tag:Name": "Tags[?Key=='Name'].Value[]"}]
         // },
         { service: "EC2",
           api: "describeSpotFleetRequests",
@@ -856,7 +856,7 @@
           title: "EC2 VPC Subnets",
           id: "ec2-subnets",
           jmespath: "Subnets",
-          headings: ["SubnetId", "VpcId", "State", "DefaultForAz", "AvailabilityZone", "AvailableIpAddressCount", "CidrBlock", "MapPublicIpOnLaunch", "Tags[?Key=='Name'].Value[]"]
+          headings: ["SubnetId", "VpcId", "State", "DefaultForAz", "AvailabilityZone", "AvailableIpAddressCount", "CidrBlock", "MapPublicIpOnLaunch", {"Tag:Name": "Tags[?Key=='Name'].Value[]"}]
         },
         { service: "EC2",
           api: "describeTags",
@@ -870,7 +870,7 @@
           title: "EC2 EBS Volumes",
           id: "ec2-volumes",
           jmespath: "Volumes",
-          headings: ["VolumeId", "VolumeType", "State", "Size", "AvailabilityZone", "CreateTime", "Attachments.InstanceId", "Attachments.DeleteOnTermination", "Tags[?Key=='Name'].Value[]"]
+          headings: ["VolumeId", "VolumeType", "State", "Size", "AvailabilityZone", "CreateTime", "Attachments.InstanceId", "Attachments.DeleteOnTermination", {"Tag:Name": "Tags[?Key=='Name'].Value[]"}]
         },
         { service: "EC2",
           api: "describeVolumesModifications",
@@ -885,7 +885,7 @@
           title: "EC2 VPC ClassicLink",
           id: "ec2-vpc-classiclink",
           jmespath: "Vpcs",
-          headings: ["VpcId", "ClassicLinkEnabled", "Tags[?Key=='Name'].Value[]"]
+          headings: ["VpcId", "ClassicLinkEnabled", {"Tag:Name": "Tags[?Key=='Name'].Value[]"}]
         },
         { service: "EC2",
           skip_regions: ['ap-northeast-1', 'ap-northeast-2', 'ap-south-1', 'ca-central-1', 'us-east-2', 'eu-west-2', 'eu-west-3', 'eu-central-1'],
@@ -931,14 +931,14 @@
           title: "EC2 VPC Peering Connections",
           id: "ec2-vpc-peering-connections",
           jmespath: "VpcPeeringConnections",
-          headings: ["VpcPeeringConnectionId", "AccepterVpcInfo.VpcId", "AccepterVpcInfo.Region", "RequesterVpcInfo.VpcId", "RequesterVpcInfo.Region", "ExpirationTime", "Status.Code", "Tags[?Key=='Name'].Value[]"]
+          headings: ["VpcPeeringConnectionId", "AccepterVpcInfo.VpcId", "AccepterVpcInfo.Region", "RequesterVpcInfo.VpcId", "RequesterVpcInfo.Region", "ExpirationTime", "Status.Code", {"Tag:Name": "Tags[?Key=='Name'].Value[]"}]
         },
         { service: "EC2",
           api: "describeVpcs",
           title: "EC2 VPCs",
           id: "ec2-vpcs",
           jmespath: "Vpcs",
-          headings: ["VpcId", "State", "CidrBlock", "IsDefault", "Tags[?Key=='Name'].Value[]"]
+          headings: ["VpcId", "State", "CidrBlock", "IsDefault", {"Tag:Name": "Tags[?Key=='Name'].Value[]"}]
         },
         { service: "EC2",
           api: "describeVpnConnections",
@@ -952,7 +952,7 @@
           title: "EC2 VPN Gateways",
           id: "ec2-vpn-gateways",
           jmespath: "VpnGateways",
-          headings: ["VpnGatewayId", "AvailabilityZone", "State", "Type", "AmazonSideAsn", "Tags[?Key=='Name'].Value[]"]
+          headings: ["VpnGatewayId", "AvailabilityZone", "State", "Type", "AmazonSideAsn", {"Tag:Name": "Tags[?Key=='Name'].Value[]"}]
         },
         // end ec2
         { service: "ECR",
@@ -966,7 +966,7 @@
           api: "listClusters",
           title: "ECS Clusters",
           id: "ecs-clusters",
-          jmespath: "map(&{Name:@}, clusterArns)", 
+          jmespath: "map(&{Name:@}, clusterArns)",
           headings: ["Name"]
         },
         // { service: "S3", // CORS doesn't work, although published as supported
@@ -999,7 +999,12 @@
         const tr = $('<tr></tr>')
         tr.append($('<th class="text-center">#</th>'))
         for (let h=0; h<headings.length; h++) {
-          tr.append($(`<th>${headings[h]}</th>`))
+          if (typeof headings[h] === 'string') {
+            tr.append($(`<th>${headings[h]}</th>`))
+          } else {
+            tr.append($(`<th>${Object.keys(headings[h])[0]}</th>`))
+          }
+
         }
         return tr
       }
@@ -1010,7 +1015,11 @@
           const tr = $('<tr></tr>')
           tr.append($(`<td class="text-center">${d + 1}</td>`))
           for (let h=0; h<headings.length; h++) {
-            tr.append($(`<td>${jmespath.search(data[d], headings[h])}</td>`))
+            if (typeof headings[h] === 'string') {
+              tr.append($(`<td>${jmespath.search(data[d], headings[h])}</td>`))
+            } else {
+              tr.append($(`<td>${jmespath.search(data[d], Object.values(headings[h])[0])}</td>`))
+            }
           }
           rows.push(tr)
         }

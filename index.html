@@ -63,6 +63,11 @@
       z-index: 1000;
       height: calc(100vh - 4rem);
     }
+
+    .tab-pane h1 {
+      padding-top: 65px;
+      margin-top: -65px;
+    }
   </style>
 </head>
 <body>
@@ -1437,12 +1442,14 @@
       
       function showAll() {
         $('.tab-content>.tab-pane').addClass('active show');
-        $('nav-item').removeClass('active show');
+        $('.nav-item a').removeClass('active show');
+        $('.nav-item a').each(function (item) {$(this).attr('data-toggle', "none")});
       }
 
       function hideAll() {
         $('.tab-content>.tab-pane').removeClass('active show');
         var active_tab = $('.nav-item .active').attr('id');
+        $('.nav-item a').each(function (item) {$(this).attr('data-toggle', "pill")});
         $('#'+active_tab).removeClass('active show');
         $('#'+active_tab).click();
       }

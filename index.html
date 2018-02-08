@@ -967,7 +967,95 @@
           title: "ECS Clusters",
           id: "ecs-clusters",
           jmespath: "map(&{Name:@}, clusterArns)",
-          headings: ["Name"]
+          headings: [{"Cluster ARNs": "Name"}]
+        },
+        // { service: "ECS",
+        //   params: { cluster: 'MUST_USE_CLUSTER_ARN' },
+        //   api: "listServices",
+        //   title: "ECS Services",
+        //   id: "ecs-services",
+        //   jmespath: "map(&{Name:@}, serviceArns)",
+        //   headings: [{"Service ARNs": "Name"}]
+        // },
+        // { service: "ECS",
+        //   params: { cluster: 'MUST_USE_CLUSTER_ARN' },
+        //   api: "listServices",
+        //   api: "listContainerInstances",
+        //   title: "ECS Container Instances",
+        //   id: "ecs-container-instances",
+        //   jmespath: "map(&{Name:@}, containerInstanceArns)",
+        //   headings: [{"Container Instance ARNs": "Name"}]
+        // },
+        { service: "ECS",
+          api: "listTaskDefinitionFamilies",
+          title: "ECS Task Definition Families",
+          id: "ecs-task-definition-families",
+          jmespath: "map(&{Name:@}, families)",
+          headings: [{"Task Definition Family ARNs": "Name"}]
+        },
+        { service: "ECS",
+          api: "listTaskDefinitions",
+          title: "ECS Task Definitions",
+          id: "ecs-task-definitions-active",
+          jmespath: "map(&{Name:@}, taskDefinitionArns)",
+          headings: [{"Task Definition ARNs": "Name"}]
+        },
+        { service: "ECS",
+          params: { status: 'INACTIVE' },
+          api: "listTaskDefinitions",
+          title: "ECS Task Definitions [INACTIVE]",
+          id: "ecs-task-definitions-inactive",
+          jmespath: "map(&{Name:@}, taskDefinitionArns)",
+          headings: [{"Task Definition ARNs [INACTIVE]": "Name"}]
+        },
+        { service: "ElastiCache",
+          api: "describeCacheClusters",
+          title: "ElastiCache Clusters",
+          id: "elasticache-cache-clusters",
+          jmespath: "CacheClusters",
+          headings: ["CAcheClusterId", {"Address": "ConfigurationEndpoint.Address"}, {"Port": "ConfigurationEndpoint.Port"}, "CacheNodeType", "Engine", "EngineVersion", "CacheClusterStatus", "NumCacheNodes", "PreferredAvailabilityZone", "CacheClusterCreateTime"]
+        },
+        { service: "ElastiCache",
+          api: "describeCacheParameterGroups",
+          title: "ElastiCache Parameter Groups",
+          id: "elasticache-parameter-groups",
+          jmespath: "CacheParameterGroups",
+          headings: ["CacheParameterGroupName", "CacheParameterGroupFamily", "Description"]
+        },
+        { service: "ElastiCache",
+          api: "describeCacheSecurityGroups",
+          title: "ElastiCache Security Groups",
+          id: "elasticache-security-groups",
+          jmespath: "CacheSecurityGroups",
+          headings: ["OwnerId", "CacheSecurityGroupName", "Description", "EC2SecurityGroups[].Status", "EC2SecurityGroups[].EC2SecurityGroupName"]
+        },
+        { service: "ElastiCache",
+          api: "describeCacheSubnetGroups",
+          title: "ElastiCache Subnet Groups",
+          id: "elasticache-subnet-groups",
+          jmespath: "CacheSubnetGroups",
+          headings: ["CacheSubnetGroupName", "CacheSubnetGroupDescription", "VpcId", "Subnets[].SubnetIdentifier"]
+        },
+        { service: "ElastiCache",
+          api: "describeReplicationGroups",
+          title: "ElastiCache Replication Groups",
+          id: "elasticache-replication-groups",
+          jmespath: "ReplicationGroups",
+          headings: ["ReplicationGroupId", "Description", "Status", "MemberClusters[]", "AutomaticFailover", "ClusterEnabled", "CacheNodeType"]
+        },
+        { service: "ElastiCache",
+          api: "describeReservedCacheNodes",
+          title: "ElastiCache Reserved Cache Nodes",
+          id: "elasticache-reserved-cache-nodes",
+          jmespath: "ReservedCacheNodes",
+          headings: ["ReservedCacheNodeId", "ReservedCacheNodesOfferingId", "CacheNodeType", "StartTime", "Duration", "FixedPrice", "UsagePrice", "CacheNodeCount", "ProductDescription", "OfferingType", "State"]
+        },
+        { service: "ElastiCache",
+          api: "describeSnapshots",
+          title: "ElastiCache Snapshots",
+          id: "elasticache-snapshots",
+          jmespath: "",
+          headings: ["ReservedCacheNodeId", "ReservedCacheNodesOfferingId", "CacheNodeType", "StartTime", "Duration", "FixedPrice", "UsagePrice", "CacheNodeCount", "ProductDescription", "OfferingType", "State"]
         },
         // { service: "S3", // CORS doesn't work, although published as supported
         //   api: "listBuckets",
@@ -992,7 +1080,7 @@
       `<a href="#" class="btn btn-sm btn-light col col-12 text-left mb-1" data-toggle="collapse" aria-expanded="false">
         <span class="spinner spinner-border spinner-border-sm"></span>
         <span class="counter badge badge-light" style="display:none">?</span>
-        &nbsp;<span class="title"></a>
+        &nbsp;<span class="title"></span><span class="timing badge font-weight-light" style="display:none"></span>
       </a>`
 
       function createTableHead(headings) {
@@ -1043,6 +1131,7 @@
             if (query.hasOwnProperty('skip_regions') && query.skip_regions.includes(region)) {
               continue // skip specified regions
             }
+            const startTs = Date.now()
             const caller = new AWS[query.service]({ region: region });
             let content = $(tableTemplate);
             content.attr('id', `region-${region}-${query.id}`);
@@ -1052,10 +1141,12 @@
             button.attr('aria-controls', `region-${region}-${query.id}`);
             button.find('.title').text(query.title);
             $(`#region-${region}`).append([button, content]);
-            const showCounter = function(text) {
+            const showCounter = function(text, timing) {
               button.find('.counter').text(text)
+              button.find('.timing').html(timing.toString().length < 3 ? `&mdash; ${timing}ms` : `&mdash; ${timing/1000}s`)
               button.find('.spinner').hide()
               button.find('.counter').show()
+              button.find('.timing').show()
             }
             const tableHandler = function(err, data) {
               if (err) {
@@ -1063,13 +1154,13 @@
                 var alert = $('<div class="alert alert-danger show my-2" role="alert"><strong>Error:</strong> '+err.message+'</div>')
                 content.append(alert);
                 button.removeClass('btn-light').addClass('btn-warning')
-                showCounter('X')
+                showCounter('X', Date.now() - startTs)
                 return false
               }
               const information = jmespath.search(data, `${query.jmespath}[]`)
               if (!information) {
                 button.removeClass('btn-light').addClass('btn-warning')
-                showCounter('0')
+                showCounter('0', Date.now() - startTs)
                 return false
               }
               if (information.length > 0) {
@@ -1078,7 +1169,7 @@
                 content.find('thead').append(createTableHead(query.headings))
                 content.find('tbody').append(createTableBody(query.headings, information))
               }
-              showCounter(information.length)
+              showCounter(information.length, Date.now() - startTs)
             }
             if (query.hasOwnProperty('params')) {
               caller[query.api].call(caller, query.params, tableHandler)

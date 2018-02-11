@@ -171,10 +171,10 @@
   <script>
     $(function () {
       // bootstrap utils
-      $('.alert').alert();
-      $('.collapse').collapse();
+      $(".alert").alert();
+      $(".collapse").collapse();
       $('[data-toggle="tooltip"]').tooltip();
-      $('#aws-credentials input').val('');
+      $("#aws-credentials input").val("");
 
       var awsQueries = [
         { service: "ACM",
@@ -185,7 +185,7 @@
           headings: ["DomainName", "CertificateArn"]
         },
         { service: "APIGateway",
-          skip_regions: ['ap-northeast-1', 'ap-northeast-2', 'ap-south-1', 'ca-central-1'],
+          skip_regions: ["ap-northeast-1", "ap-northeast-2", "ap-south-1", "ca-central-1", "eu-west-1", "ap-southeast-2", "eu-west-2", "eu-central-1", "eu-west-3", "us-east-1"],
           api: "getRestApis",
           title: "API Gateway REST APIs",
           id: "apigw-rest-apis",
@@ -415,7 +415,7 @@
           headings: ["policyName", "lastUpdatedTime", "policyDocument"]
         },
         { service: "CodeCommit",
-          skip_regions: ['eu-west-3'],
+          skip_regions: ["eu-west-3"],
           api: "listRepositories",
           title: "CodeCommit Repositories",
           id: "codecommit-repositories",
@@ -444,7 +444,7 @@
           headings: ["Name"]
         },
         { service: "CodePipeline",
-          skip_regions: ['eu-west-3'],
+          skip_regions: ["eu-west-3"],
           api: "listPipelines",
           title: "CodePipeline Pipelines",
           id: "codepipeline-pipelines",
@@ -452,7 +452,7 @@
           headings: ["name", "version", "created", "updated"]
         },
         { service: "CognitoIdentity",
-          skip_regions: ['ca-central-1', 'eu-west-3', 'sa-east-1', 'us-west-1', 'us-east-2'],
+          skip_regions: ["ca-central-1", "eu-west-3", "sa-east-1", "us-west-1", "us-east-2"],
           params: { MaxResults: 60 },
           api: "listIdentityPools",
           title: "Cognito Identity Pools",
@@ -461,7 +461,7 @@
           headings: ["IdentityPoolId", "IdentityPoolName"]
         },
         { service: "CognitoIdentityServiceProvider",
-          skip_regions: ['ca-central-1', 'eu-west-3', 'sa-east-1', 'us-west-1', 'us-east-2'],
+          skip_regions: ["ca-central-1", "eu-west-3", "sa-east-1", "us-west-1", "us-east-2"],
           params: { MaxResults: 60 },
           api: "listUserPools",
           title: "Cognito User Pools",
@@ -470,7 +470,7 @@
           headings: ["Id", "Name", "Status", "LastModifiedDate", "CreationDate"]
         },
         { service: "CognitoSync",
-          skip_regions: ['ca-central-1', 'eu-west-3', 'sa-east-1', 'us-west-1', 'us-east-2'],
+          skip_regions: ["ca-central-1", "eu-west-3", "sa-east-1", "us-west-1", "us-east-2"],
           api: "listIdentityPoolUsage",
           title: "Cognito Sync Identity Pool Usage",
           id: "cognitosync-identity-pool-usage",
@@ -578,7 +578,7 @@
           headings: ["ownerAccount", "virtualInterfaceId", "location", "connectionId", "virtualInterfaceType", "virtualInterfaceName", "amazonAddress", "customerAddress", "virtualInterfaceState"]
         },
         { service: "DynamoDB",
-          skip_regions: ['ap-southeast-2', 'ap-southeast-1', 'ap-south-1', 'ap-northeast-2', 'ap-northeast-1', 'eu-central-1', 'eu-west-3', 'eu-west-2', 'ca-central-1', 'us-west-1', 'sa-east-1'],
+          skip_regions: ["ap-southeast-2", "ap-southeast-1", "ap-south-1", "ap-northeast-2", "ap-northeast-1", "eu-central-1", "eu-west-3", "eu-west-2", "ca-central-1", "us-west-1", "sa-east-1"],
           api: "listBackups",
           title: "DynamoDB Backups",
           id: "dynamodb-backups",
@@ -586,7 +586,7 @@
           headings: ["TableName", "TableId", "BackupArn", "BackupName", "BackupCreationDateTime", "BackupStatus", "BackupSizeBytes"]
         },
         { service: "DynamoDB",
-          skip_regions: ['ap-southeast-2', 'ap-southeast-1', 'ap-south-1', 'ap-northeast-2', 'ap-northeast-1', 'eu-central-1', 'eu-west-3', 'eu-west-2', 'ca-central-1', 'us-west-1', 'sa-east-1'],
+          skip_regions: ["ap-southeast-2", "ap-southeast-1", "ap-south-1", "ap-northeast-2", "ap-northeast-1", "eu-central-1", "eu-west-3", "eu-west-2", "ca-central-1", "us-west-1", "sa-east-1"],
           api: "listGlobalTables",
           title: "DynamoDB Global Tables",
           id: "dynamodb-global-tables",
@@ -613,7 +613,7 @@
           title: "EC2 Elastic IP Addresses",
           id: "ec2-eips",
           jmespath: "Addresses",
-          headings: ["InstanceId", "PublicIp", "AllocationId", "AssociationId", "Domain", "NetworkInterfaceId", "NetworkInterfaceOwnerId", "PrivateIpAddress", {"Tag:Name": "Tags[?Key=='Name'].Value[]"}]
+          headings: ["InstanceId", "PublicIp", "AllocationId", "AssociationId", "Domain", "NetworkInterfaceId", "NetworkInterfaceOwnerId", "PrivateIpAddress", {"Tag:Name": 'Tags[?Key=="Name"].Value[]'}]
         },
         { service: "EC2",
           api: "describeAvailabilityZones",
@@ -630,33 +630,34 @@
           headings: ["BundleId", "BundleTaskError.Message", "InstanceId", "Progress", "StartTime", "State", "Storage", "UpdateTime"]
         },
         { service: "EC2",
-          skip_regions: ['ap-northeast-1', 'ap-northeast-2', 'ap-south-1', 'ca-central-1', 'us-east-2', 'eu-west-2', 'eu-west-3', 'eu-central-1'],
+          skip_regions: ["ap-northeast-1", "ap-northeast-2", "ap-south-1", "ca-central-1", "us-east-2", "eu-west-2", "eu-west-3", "eu-central-1"],
           api: "describeClassicLinkInstances",
           title: "EC2 ClassicLink Instances",
           id: "ec2-classiclink-instances",
           jmespath: "Instances",
-          headings: ["InstanceId", "VpcId", {"Tag:Name": "Tags[?Key=='Name'].Value[]"}]
+          headings: ["InstanceId", "VpcId", {"Tag:Name": 'Tags[?Key=="Name"].Value[]'}]
         },
         { service: "EC2",
+          skip_regions: ["eu-west-3"],
           api: "describeConversionTasks",
           title: "EC2 Import/Export Conversion Tasks",
           id: "ec2-coversion-tasks",
           jmespath: "ConversionTasks",
-          headings: ["ConversionTaskId", "ExpirationTime", "ImportInstance.Description", "ImportInstance.InstanceId", "State", "StatusMessage", {"Tag:Name": "Tags[?Key=='Name'].Value[]"}]
+          headings: ["ConversionTaskId", "ExpirationTime", "ImportInstance.Description", "ImportInstance.InstanceId", "State", "StatusMessage", {"Tag:Name": 'Tags[?Key=="Name"].Value[]'}]
         },
         { service: "EC2",
           api: "describeCustomerGateways",
           title: "EC2 VPC Customer Gateways",
           id: "ec2-customer-gateways",
           jmespath: "CustomerGateways",
-          headings: ["BgpAsn", "CustomerGatewayId", "IpAddress", "State", "Type", {"Tag:Name": "Tags[?Key=='Name'].Value[]"}]
+          headings: ["BgpAsn", "CustomerGatewayId", "IpAddress", "State", "Type", {"Tag:Name": 'Tags[?Key=="Name"].Value[]'}]
         },
         { service: "EC2",
           api: "describeDhcpOptions",
           title: "EC2 VPC DHCP Options",
           id: "ec2-dhcp-options",
           jmespath: "DhcpOptions",
-          headings: ["DhcpOptionsId", {"Tag:Name": "Tags[?Key=='Name'].Value[]"}]
+          headings: ["DhcpOptionsId", {"Tag:Name": 'Tags[?Key=="Name"].Value[]'}]
         },
         { service: "EC2",
           api: "describeEgressOnlyInternetGateways",
@@ -666,7 +667,7 @@
           headings: ["EgressOnlyInternetGatewayId", "Attachments[].State"]
         },
         { service: "EC2",
-          skip_regions: ['ap-northeast-1', 'ap-northeast-2', 'ap-south-1', 'sa-east-1', 'us-west-1', 'ca-central-1', 'eu-west-2', 'eu-west-3'],
+          skip_regions: ["ap-northeast-1", "ap-northeast-2", "ap-south-1", "sa-east-1", "us-west-1", "ca-central-1", "eu-west-2", "eu-west-3"],
           api: "describeElasticGpus",
           title: "EC2 Elastic GPUs",
           id: "ec2-elastic-gpus",
@@ -674,6 +675,7 @@
           headings: ["ElasticGpuId", "AvailabilityZone", "ElasticGpuType", "ElasticGpuHealth.Status", "ElasticGpuState", "InstanceId"]
         },
         { service: "EC2",
+          skip_regions: ["eu-west-3"],
           api: "describeExportTasks",
           title: "EC2 Export Tasks",
           id: "ec2-export-tasks",
@@ -727,14 +729,14 @@
           title: "EC2 Instances",
           id: "ec2-instances",
           jmespath: "Reservations[].Instances",
-          headings: ["InstanceId", "InstanceType", "ImageId", "LaunchTime", "KeyName", "State.Name", {"Tag:Name": "Tags[?Key=='Name'].Value[]"}]
+          headings: ["InstanceId", "InstanceType", "ImageId", "LaunchTime", "KeyName", "State.Name", {"Tag:Name": 'Tags[?Key=="Name"].Value[]'}]
         },
         { service: "EC2",
           api: "describeInternetGateways",
           title: "EC2 VPC Internet Gateways",
           id: "ec2-internet-gateways",
           jmespath: "InternetGateways",
-          headings: ["InternetGatewayId", "Attachments[].State", {"Tag:Name": "Tags[?Key=='Name'].Value[]"}]
+          headings: ["InternetGatewayId", "Attachments[].State", {"Tag:Name": 'Tags[?Key=="Name"].Value[]'}]
         },
         { service: "EC2",
           api: "describeKeyPairs",
@@ -748,10 +750,10 @@
           title: "EC2 Launch Templates",
           id: "ec2-launch-templates",
           jmespath: "LaunchTemplates",
-          headings: ["LaunchTemplateId", "LaunchTemplateName", "CreateTime", "CreatedBy", {"Tag:Name": "Tags[?Key=='Name'].Value[]"}]
+          headings: ["LaunchTemplateId", "LaunchTemplateName", "CreateTime", "CreatedBy", {"Tag:Name": 'Tags[?Key=="Name"].Value[]'}]
         },
         { service: "EC2",
-          skip_regions: ['ap-northeast-1', 'ap-northeast-2', 'ap-south-1', 'ca-central-1', 'us-east-2', 'eu-west-2', 'eu-west-3', 'eu-central-1'],
+          skip_regions: ["ap-northeast-1", "ap-northeast-2", "ap-south-1", "ca-central-1", "us-east-2", "eu-west-2", "eu-west-3", "eu-central-1"],
           api: "describeMovingAddresses",
           title: "EC2 Classic<->VPC Moving Elastic IPs",
           id: "ec2-moving-addresses",
@@ -763,21 +765,21 @@
           title: "EC2 VPC NAT Gateways",
           id: "ec2-nat-gateways",
           jmespath: "NatGateways",
-          headings: ["NatGatewayId", "NatGatewayAddresses.PublicIp", "NatGatewayAddresses.PrivateIp", "CreateTime", "DeleteTime", "FailureCode", "State", "VpcId", {"Tag:Name": "Tags[?Key=='Name'].Value[]"}]
+          headings: ["NatGatewayId", "NatGatewayAddresses.PublicIp", "NatGatewayAddresses.PrivateIp", "CreateTime", "DeleteTime", "FailureCode", "State", "VpcId", {"Tag:Name": 'Tags[?Key=="Name"].Value[]'}]
         },
         { service: "EC2",
           api: "describeNetworkAcls",
           title: "EC2 VPC Network ACLs",
           id: "ec2-network-acls",
           jmespath: "NetworkAcls",
-          headings: ["NetworkAclId", "Associations.SubnetId", "IsDefault", "Entries.RuleNumber", "Entries.RuleAction", "Entries.CidrBlock", "Entries.PortRange", "Entries.Egress", {"Tag:Name": "Tags[?Key=='Name'].Value[]"}]
+          headings: ["NetworkAclId", "Associations.SubnetId", "IsDefault", "Entries.RuleNumber", "Entries.RuleAction", "Entries.CidrBlock", "Entries.PortRange", "Entries.Egress", {"Tag:Name": 'Tags[?Key=="Name"].Value[]'}]
         },
         { service: "EC2",
           api: "describeNetworkInterfaces",
           title: "EC2 Network Interfaces",
           id: "ec2-network-interfaces",
           jmespath: "NetworkInterfaces",
-          headings: ["NetworkInterfaceId", "Description", "AvailabilityZone", "InterfaceType", "SourceDestCheck", "Status", {"Tag:Name": "TagSet[?Key=='Name'].Value[]"}]
+          headings: ["NetworkInterfaceId", "Description", "AvailabilityZone", "InterfaceType", "SourceDestCheck", "Status", {"Tag:Name": 'TagSet[?Key=="Name"].Value[]'}]
         },
         { service: "EC2",
           api: "describePlacementGroups",
@@ -791,14 +793,14 @@
           title: "EC2 Reserved Instances",
           id: "ec2-reserved-instances",
           jmespath: "ReservedInstances",
-          headings: ["ReservedInstancesId", "AvailabilityZone", "Duration", "Start", "End", "FixedPrice", "InstanceCount", "InstanceType", "ProductDescription", "State", "UsagePrice", "InstanceTenancy", "OfferingClass", "OfferingType", "Scope", {"Tag:Name": "Tags[?Key=='Name'].Value[]"}]
+          headings: ["ReservedInstancesId", "AvailabilityZone", "Duration", "Start", "End", "FixedPrice", "InstanceCount", "InstanceType", "ProductDescription", "State", "UsagePrice", "InstanceTenancy", "OfferingClass", "OfferingType", "Scope", {"Tag:Name": 'Tags[?Key=="Name"].Value[]'}]
         },
         // { service: "EC2",
         //   api: "describeReservedInstancesListings",
         //   title: "EC2 Reserved Instance Marketplace Listings",
         //   id: "ec2-reserved-instance-marketplace-listings",
         //   jmespath: "ReservedInstancesListings",
-        //   headings: ["ReservedInstancesListingId", "CreateDate", "InstanceCounts.InstanceCount", "InstanceCounts.State", "Status", "StatusMessage", {"Tag:Name": "Tags[?Key=='Name'].Value[]"}]
+        //   headings: ["ReservedInstancesListingId", "CreateDate", "InstanceCounts.InstanceCount", "InstanceCounts.State", "Status", "StatusMessage", {"Tag:Name": 'Tags[?Key=="Name"].Value[]'}]
         // },
         { service: "EC2",
           api: "describeReservedInstancesModifications",
@@ -812,11 +814,11 @@
           title: "EC2 VPC Route Tables",
           id: "ec2-route-tables",
           jmespath: "RouteTables",
-          headings: ["RouteTableId", "VpcId", "Associations.Main", "Associations.SubnetId", {"Tag:Name": "Tags[?Key=='Name'].Value[]"}]
+          headings: ["RouteTableId", "VpcId", "Associations.Main", "Associations.SubnetId", {"Tag:Name": 'Tags[?Key=="Name"].Value[]'}]
         },
         { service: "EC2",
-          region: 'us-east-1',
-          skip_regions: ['ap-northeast-1', 'ap-northeast-2', 'ap-south-1', 'sa-east-1', 'us-west-1', 'ca-central-1', 'us-east-2', 'eu-west-2', 'eu-west-3', 'ap-sourtheast-1', 'ap-southeast-2', 'eu-central-1'],
+          region: "us-east-1",
+          skip_regions: ["ap-northeast-1", "ap-northeast-2", "ap-south-1", "sa-east-1", "us-west-1", "ca-central-1", "us-east-2", "eu-west-2", "eu-west-3", "ap-sourtheast-1", "ap-southeast-2", "eu-central-1"],
           api: "describeScheduledInstances",
           title: "EC2 Scheduled Instances",
           id: "ec2-scheduled-instances",
@@ -828,14 +830,14 @@
           title: "EC2 Security Groups",
           id: "ec2-security-groups",
           jmespath: "SecurityGroups",
-          headings: ["GroupId", "GroupName", "Description", "VpcId", {"Tag:Name": "Tags[?Key=='Name'].Value[]"}]
+          headings: ["GroupId", "GroupName", "Description", "VpcId", {"Tag:Name": 'Tags[?Key=="Name"].Value[]'}]
         },
-        // { service: "EC2",
+        // { service: "EC2", // takes very very long to query and return results
         //   api: "describeSnapshots",
         //   title: "EC2 EBS Snapshots",
         //   id: "ec2-ebs-snapshots",
         //   jmespath: "Snapshots",
-        //   headings: ["SnapshotId", "Description", "Encrypted", "State", "StateMessage", "VolumeId", "VolumeSize", {"Tag:Name": "Tags[?Key=='Name'].Value[]"}]
+        //   headings: ["SnapshotId", "Description", "Encrypted", "State", "StateMessage", "VolumeId", "VolumeSize", {"Tag:Name": 'Tags[?Key=="Name"].Value[]'}]
         // },
         { service: "EC2",
           api: "describeSpotFleetRequests",
@@ -856,7 +858,7 @@
           title: "EC2 VPC Subnets",
           id: "ec2-subnets",
           jmespath: "Subnets",
-          headings: ["SubnetId", "VpcId", "State", "DefaultForAz", "AvailabilityZone", "AvailableIpAddressCount", "CidrBlock", "MapPublicIpOnLaunch", {"Tag:Name": "Tags[?Key=='Name'].Value[]"}]
+          headings: ["SubnetId", "VpcId", "State", "DefaultForAz", "AvailabilityZone", "AvailableIpAddressCount", "CidrBlock", "MapPublicIpOnLaunch", {"Tag:Name": 'Tags[?Key=="Name"].Value[]'}]
         },
         { service: "EC2",
           api: "describeTags",
@@ -870,7 +872,7 @@
           title: "EC2 EBS Volumes",
           id: "ec2-volumes",
           jmespath: "Volumes",
-          headings: ["VolumeId", "VolumeType", "State", "Size", "AvailabilityZone", "CreateTime", "Attachments.InstanceId", "Attachments.DeleteOnTermination", {"Tag:Name": "Tags[?Key=='Name'].Value[]"}]
+          headings: ["VolumeId", "VolumeType", "State", "Size", "AvailabilityZone", "CreateTime", "Attachments.InstanceId", "Attachments.DeleteOnTermination", {"Tag:Name": 'Tags[?Key=="Name"].Value[]'}]
         },
         { service: "EC2",
           api: "describeVolumesModifications",
@@ -880,15 +882,15 @@
           headings: ["VolumeId", "ModificationState", "StatusMessage", "TargetSize", "TargetIops", "TargetVolumeType", "OriginalSize", "OriginalIops", "OriginalVolumeType", "Progress", "StartTime", "EndTime"]
         },
         { service: "EC2",
-          skip_regions: ['ap-northeast-1', 'ap-northeast-2', 'ap-south-1', 'ca-central-1', 'us-east-2', 'eu-west-2', 'eu-west-3', 'eu-central-1'],
+          skip_regions: ["ap-northeast-1", "ap-northeast-2", "ap-south-1", "ca-central-1", "us-east-2", "eu-west-2", "eu-west-3", "eu-central-1"],
           api: "describeVpcClassicLink",
           title: "EC2 VPC ClassicLink",
           id: "ec2-vpc-classiclink",
           jmespath: "Vpcs",
-          headings: ["VpcId", "ClassicLinkEnabled", {"Tag:Name": "Tags[?Key=='Name'].Value[]"}]
+          headings: ["VpcId", "ClassicLinkEnabled", {"Tag:Name": 'Tags[?Key=="Name"].Value[]'}]
         },
         { service: "EC2",
-          skip_regions: ['ap-northeast-1', 'ap-northeast-2', 'ap-south-1', 'ca-central-1', 'us-east-2', 'eu-west-2', 'eu-west-3', 'eu-central-1'],
+          skip_regions: ["ap-northeast-1", "ap-northeast-2", "ap-south-1", "ca-central-1", "us-east-2", "eu-west-2", "eu-west-3", "eu-central-1"],
           api: "describeVpcClassicLinkDnsSupport",
           title: "EC2 VPC ClassicLink DNS Support",
           id: "ec2-vpc-classiclink-dns-support",
@@ -896,7 +898,7 @@
           headings: ["VpcId", "ClassicLinkDnsSupported"]
         },
         { service: "EC2",
-          skip_regions: ['eu-west-3'],
+          skip_regions: ["eu-west-3"],
           api: "describeVpcEndpointConnectionNotifications",
           title: "EC2 VPC Endpoint Connection Notifications",
           id: "ec2-vpc-endpoint-connection-notifications",
@@ -904,7 +906,7 @@
           headings: ["ConnectionNotificationId", "ServiceId", "VpcEndpointId", "ConnectionNotificationArn", "ConnectionEvents", "ConnectionNotificationState"]
         },
         { service: "EC2",
-          skip_regions: ['eu-west-3'],
+          skip_regions: ["eu-west-3"],
           api: "describeVpcEndpointConnections",
           title: "EC2 VPC Endpoint Connections",
           id: "ec2-vpc-endpoint-connections",
@@ -919,7 +921,7 @@
           headings: ["VpcEndpointId", "VpcEndpointType", "VpcId", "ServiceName", "State", "CreationTimestamp"]
         },
         { service: "EC2",
-          skip_regions: ['eu-west-3'],
+          skip_regions: ["eu-west-3"],
           api: "describeVpcEndpointServiceConfigurations",
           title: "EC2 VPC Endpoint Service Configurations",
           id: "ec2-vpc-endpoint-service-configs",
@@ -931,14 +933,14 @@
           title: "EC2 VPC Peering Connections",
           id: "ec2-vpc-peering-connections",
           jmespath: "VpcPeeringConnections",
-          headings: ["VpcPeeringConnectionId", "AccepterVpcInfo.VpcId", "AccepterVpcInfo.Region", "RequesterVpcInfo.VpcId", "RequesterVpcInfo.Region", "ExpirationTime", "Status.Code", {"Tag:Name": "Tags[?Key=='Name'].Value[]"}]
+          headings: ["VpcPeeringConnectionId", "AccepterVpcInfo.VpcId", "AccepterVpcInfo.Region", "RequesterVpcInfo.VpcId", "RequesterVpcInfo.Region", "ExpirationTime", "Status.Code", {"Tag:Name": 'Tags[?Key=="Name"].Value[]'}]
         },
         { service: "EC2",
           api: "describeVpcs",
           title: "EC2 VPCs",
           id: "ec2-vpcs",
           jmespath: "Vpcs",
-          headings: ["VpcId", "State", "CidrBlock", "IsDefault", {"Tag:Name": "Tags[?Key=='Name'].Value[]"}]
+          headings: ["VpcId", "State", "CidrBlock", "IsDefault", {"Tag:Name": 'Tags[?Key=="Name"].Value[]'}]
         },
         { service: "EC2",
           api: "describeVpnConnections",
@@ -952,7 +954,7 @@
           title: "EC2 VPN Gateways",
           id: "ec2-vpn-gateways",
           jmespath: "VpnGateways",
-          headings: ["VpnGatewayId", "AvailabilityZone", "State", "Type", "AmazonSideAsn", {"Tag:Name": "Tags[?Key=='Name'].Value[]"}]
+          headings: ["VpnGatewayId", "AvailabilityZone", "State", "Type", "AmazonSideAsn", {"Tag:Name": 'Tags[?Key=="Name"].Value[]'}]
         },
         // end ec2
         { service: "ECR",
@@ -970,7 +972,7 @@
           headings: [{"Cluster ARNs": "Name"}]
         },
         // { service: "ECS",
-        //   params: { cluster: 'MUST_USE_CLUSTER_ARN' },
+        //   params: { cluster: "MUST_USE_CLUSTER_ARN" }, // does not work without a cluster arn
         //   api: "listServices",
         //   title: "ECS Services",
         //   id: "ecs-services",
@@ -978,7 +980,7 @@
         //   headings: [{"Service ARNs": "Name"}]
         // },
         // { service: "ECS",
-        //   params: { cluster: 'MUST_USE_CLUSTER_ARN' },
+        //   params: { cluster: "MUST_USE_CLUSTER_ARN" }, // does not work without a cluster arn
         //   api: "listServices",
         //   api: "listContainerInstances",
         //   title: "ECS Container Instances",
@@ -1001,7 +1003,7 @@
           headings: [{"Task Definition ARNs": "Name"}]
         },
         { service: "ECS",
-          params: { status: 'INACTIVE' },
+          params: { status: "INACTIVE" },
           api: "listTaskDefinitions",
           title: "ECS Task Definitions [INACTIVE]",
           id: "ecs-task-definitions-inactive",
@@ -1023,6 +1025,7 @@
           headings: ["CacheParameterGroupName", "CacheParameterGroupFamily", "Description"]
         },
         { service: "ElastiCache",
+          skip_regions: ["ap-south-1", "ap-northeast-2", "eu-central-1", "eu-west-3", "ap-southeast-2", "ca-central-1", "us-east-2", "eu-west-2"],
           api: "describeCacheSecurityGroups",
           title: "ElastiCache Security Groups",
           id: "elasticache-security-groups",
@@ -1141,13 +1144,128 @@
           jmespath: "TargetGroups",
           headings: ["TargetGroupName", "VpcId", "Protocol", "Port", "HealthCheckProtocol", "HealthCheckPort", "HealthCheckPath", "HealthCheckIntervalSeconds", "UnhealthyThresholdCount"]
         },
-        { service: "ELBv2",
-          api: "describeTargetHealth",
-          title: "ELB v2 Target Health",
-          id: "elbv2-target-health",
-          jmespath: "TargetHealthDescriptions",
-          headings: ["Target.Id", "TargetHealth.State", "TargetHealth.Reason", "TargetHealth.Description"]
+        { service: "EMR",
+          api: "listClusters",
+          title: "EMR Clusters",
+          id: "emr-clusters",
+          jmespath: "Clusters",
+          headings: ["Id", "Name", "State", "StateChangeReason.Code", "StateChangeReason.Message", "Timeline.CreationDateTime"]
         },
+        { service: "EMR",
+          api: "listSecurityConfigurations",
+          title: "EMR Security Configurations",
+          id: "emr-security-configurations",
+          jmespath: "SecurityConfigurations",
+          headings: ["Name", "CreationDateTime"]
+        },
+        // { service: "ES", // ES is not part of default AWS-SDK.js
+        //   api: "listDomainNames",
+        //   title: "ElasticSearch Domain Names",
+        //   id: "es-domain-names",
+        //   jmespath: "DomainNames",
+        //   headings: ["DomainName"]
+        // },
+        // { service: "ES",
+        //   api: "listElasticsearchVersions",
+        //   title: "ElasticSearch Supported Versions",
+        //   id: "es-versions",
+        //   jmespath: "map(&{Version:@}, ElasticsearchVersions)",
+        //   headings: ["Version"]
+        // },
+        { service: "ElasticTranscoder",
+          skip_regions: ["ap-northeast-2", "eu-west-2", "eu-central-1", "eu-west-3", "ca-central-1", "us-east-2", "sa-east-1", "us-east-2", "eu-west-3", "eu-west-2", "eu-central-1", "ca-central-1", "eu-west-3"],
+          api: "listPipelines",
+          title: "ElasticTranscoder Pipelines",
+          id: "elastictranscoder-pipelines",
+          jmespath: "Pipelines",
+          headings: ["Id", "Arn", "Name", "Status", "InputBucket", "OutputBucket"]
+        },
+        { service: "Firehose",
+          skip_regions: ["ap-northeast-2", "ap-south-1", "ca-central-1", "eu-west-2", "eu-west-3", "sa-east-1"],
+          api: "listDeliveryStreams",
+          title: "Kinesis Firehose Delivery Streams",
+          id: "firehose-delivery-streams",
+          jmespath: "map(&{Name:@}, DeliveryStreamNames)",
+          headings: ["Name"]
+        },
+        // { service: "Gamelift", // Gamelift is not part of default AWS-SDK.js
+        //   api: "describeFleetCapacity",
+        //   title: "Gamelift Fleet Capacity",
+        //   id: "gamelift-fleet-capacity",
+        //   jmespath: "FleetCapacity",
+        //   headings: ["FleetId", "InstanceType", "InstanceCounts.ACTIVE", "InstanceCounts.DESIRED", "InstanceCounts.MAXIMUM"]
+        // },
+        // { service: "Gamelift",
+        //   api: "describeFleetUtilization",
+        //   title: "Gamelift Fleet Utilization",
+        //   id: "gamelift-fleet-utilization",
+        //   jmespath: "FleetUtilization",
+        //   headings: ["FleetId", "ActiveServerProcessCount", "ActiveGameSessionCount", "CurrentPlayerSessionCount", "MaximumPlayerSessionCount"]
+        // },
+        // { service: "Gamelift",
+        //   api: "describeGameSessions",
+        //   title: "Gamelift Game Sessions",
+        //   id: "gamelift-game-sessions",
+        //   jmespath: "GameSessions",
+        //   headings: ["GameSessionId", "Name", "FleetId", "CreationTime", "CurrentPlayerSessionCount", "Status"]
+        // },
+        // { service: "Gamelift",
+        //   api: "describeMatchmakingConfigurations",
+        //   title: "Gamelift Matchmaking Configurations",
+        //   id: "gamelift-matchmaking-configurations",
+        //   jmespath: "Configurations",
+        //   headings: ["Name", "Description", "RuleSetName", "CreationTime"]
+        // },
+        // { service: "Gamelift",
+        //   api: "describeMatchmakingRuleSets",
+        //   title: "Gamelift Matchmaking Rule Sets",
+        //   id: "gamelift-matchmaking-rule-sets",
+        //   jmespath: "map(&{Name:@}, Names)",
+        //   headings: ["Name"]
+        // },
+        // { service: "Gamelift",
+        //   api: "describeVpcPeeringAuthorizations",
+        //   title: "Gamelift VPC Peering Authorizations",
+        //   id: "gamelift-vpc-peering-authorizations",
+        //   jmespath: "VpcPeeringAuthorizations",
+        //   headings: ["GameLiftAwsAccountId", "PeerVpcAwsAccountId", "PeerVpcId", "CreationTime", "ExpirationTime"]
+        // },
+        // { service: "Gamelift",
+        //   api: "describeVpcPeeringConnections",
+        //   title: "Gamelift VPC Peering Connections",
+        //   id: "gamelift-vpc-peering-connections",
+        //   jmespath: "VpcPeeringConnections",
+        //   headings: ["FleetId", "IpV4CidrBlock", "VpcPeeringConnectionId", "Status.Code", "Status.Message", "PeerVpcId", "GameLiftVpcId"]
+        // },
+        // { service: "Gamelift",
+        //   api: "listAliases",
+        //   title: "Gamelift Aliases",
+        //   id: "gamelift-aliases",
+        //   jmespath: "Aliases",
+        //   headings: ["AliasId", "Name", "Description", "RoutingStrategy.Type", "RoutingStrategy.FleetId", "CreationTime"]
+        // },
+        // { service: "Gamelift",
+        //   api: "listBuilds",
+        //   title: "Gamelift Builds",
+        //   id: "gamelift-builds",
+        //   jmespath: "Builds",
+        //   headings: ["BuildId", "Name", "Version", "Status", "SizeOnDisk", "OperatingSystem", "CreationTime"]
+        // },
+        // { service: "Gamelift",
+        //   api: "listFleets",
+        //   title: "Gamelift Fleets",
+        //   id: "gamelift-fleets",
+        //   jmespath: "map(&{Fleet:@}, FleetIds)",
+        //   headings: ["Fleet"]
+        // },
+        // { service: "Glacier", // Glacier is not part of default AWS-SDK.js
+        //   api: "listVaults",
+        //   title: "Glacier Vaults",
+        //   id: "glacier-vaults",
+        //   jmespath: "VaultList",
+        //   headings: ["VaultARN", "VaultName", "CreationDate", "NumberOfArchives", "SizeInBytes"]
+        // },
+
 
         // { service: "S3", // CORS doesn't work, although published as supported
         //   api: "listBuckets",
@@ -1224,7 +1342,13 @@
               continue // skip specified regions
             }
             const startTs = Date.now()
-            const caller = new AWS[query.service]({ region: region });
+            let caller
+            try {
+              caller = new AWS[query.service]({ region: region });
+            } catch (e) {
+              console.log(`Error using query.service ${query.service}: `, e.message)
+              continue
+            }
             let content = $(tableTemplate);
             content.attr('id', `region-${region}-${query.id}`);
             let button = $(serviceButton);
@@ -1243,7 +1367,7 @@
             const tableHandler = function(err, data) {
               if (err) {
                 content.empty()
-                var alert = $('<div class="alert alert-danger show my-2" role="alert"><strong>Error:</strong> '+err.message+'</div>')
+                var alert = $(`<div class="alert alert-danger show my-2" role="alert"><strong>Error:</strong> ${err.message}</div>`)
                 content.append(alert);
                 button.removeClass('btn-light').addClass('btn-warning')
                 showCounter('X', Date.now() - startTs)
@@ -1285,8 +1409,8 @@
           regions = ["global"].concat(regions);
           window.AWS_REGIONS = regions;
           for (var i=0; i<regions.length; i++) {
-            tabs.push( $('<li class="nav-item"><a href="#region-'+regions[i]+'" id="tab-region-'+regions[i]+'" class="nav-link" data-toggle="pill" role="tab">'+regions[i]+'</a></li>') );
-            tabPanes.push( $('<div class="tab-pane show" id="region-'+regions[i]+'" role="tabpanel" aria-labelledby="tab-region-'+regions[i]+'"></div>') )
+            tabs.push( $(`<li class="nav-item"><a href="#region-${regions[i]}" id="tab-region-${regions[i]}" class="nav-link" data-toggle="pill" role="tab">${regions[i]}</a></li>`) );
+            tabPanes.push( $(`<div class="tab-pane show" id="region-${regions[i]}" role="tabpanel" aria-labelledby="tab-region-${regions[i]}"></div>`) )
           }
           $('#aws-region-tabs').append(tabs);
           $('#aws-inventory').append(tabPanes);
@@ -1296,8 +1420,8 @@
       }
 
       function credentialsFailAlert(message) {
-        var closeButton = $('<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>')
-        var alert = $('<div class="alert alert-danger alert-dismissible show my-2" role="alert"><strong>Error verifying credentials.</strong> '+message+'</div>')
+        var closeButton = $(`<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>`)
+        var alert = $(`<div class="alert alert-danger alert-dismissible show my-2" role="alert"><strong>Error verifying credentials.</strong> ${message}</div>`)
         alert.append(closeButton);
         $('#alerts').append(alert);
       }

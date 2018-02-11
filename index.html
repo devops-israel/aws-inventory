@@ -1265,6 +1265,151 @@
         //   jmespath: "VaultList",
         //   headings: ["VaultARN", "VaultName", "CreationDate", "NumberOfArchives", "SizeInBytes"]
         // },
+        { service: "Inspector",
+          skip_regions: ["ap-southeast-1", "ca-central-1", "eu-west-2", "eu-west-3", "sa-east-1"],
+          api: "listRulesPackages",
+          title: "Inspector Rules Packages",
+          id: "inspector-rules-packages",
+          jmespath: "map(&{Arn:@}, rulesPackageArns)",
+          headings: ["Arn"]
+        },
+        { service: "Inspector",
+          skip_regions: ["ap-southeast-1", "ca-central-1", "eu-west-2", "eu-west-3", "sa-east-1"],
+          api: "listAssessmentTargets",
+          params: { maxResults: 500 },
+          title: "Inspector Assessment Targets",
+          id: "inspector-assessment-targets",
+          jmespath: "map(&{Arn:@}, assessmentTargetArns)",
+          headings: ["Arn"]
+        },
+        { service: "Iot",
+          skip_regions: ["ap-south-1", "ca-central-1", "eu-west-3", "sa-east-1", "us-west-1"],
+          api: "listAuthorizers",
+          title: "IoT Authorizers",
+          id: "iot-authorizers",
+          jmespath: "authorizers",
+          headings: ["authorizerName", "authorizerArn"]
+        },
+        { service: "Iot",
+          skip_regions: ["ap-south-1", "ca-central-1", "eu-west-3", "sa-east-1", "us-west-1"],
+          api: "listCACertificates",
+          title: "IoT CA Certificates",
+          id: "iot-ca-certificates",
+          jmespath: "certificates",
+          headings: ["certificateArn", "certificateId", "status", "creationDate"]
+        },
+        { service: "Iot",
+          skip_regions: ["ap-south-1", "ca-central-1", "eu-west-3", "sa-east-1", "us-west-1"],
+          api: "listCertificates",
+          title: "IoT Certificates",
+          id: "iot-certificates",
+          jmespath: "certificates",
+          headings: ["certificateArn", "certificateId", "status", "creationDate"]
+        },
+        { service: "Iot",
+          skip_regions: ["ap-south-1", "ca-central-1", "eu-west-3", "sa-east-1", "us-west-1"],
+          api: "listIndices",
+          title: "IoT Indices",
+          id: "iot-indices",
+          jmespath: "map(&{Name:@}, indexNames)",
+          headings: ["Name"]
+        },
+        { service: "Iot",
+          skip_regions: ["ap-south-1", "ca-central-1", "eu-west-3", "sa-east-1", "us-west-1"],
+          api: "listJobs",
+          title: "IoT Jobs",
+          id: "iot-jobs",
+          jmespath: "jobs",
+          headings: ["jobArn", "jobId", "thingGroupId", "targetSelection", "status", "createdAt", "lastUpdateAt", "completedAt"]
+        },
+        // { service: "Iot", // CORS not enabled
+        //   skip_regions: ["ap-south-1", "ca-central-1", "eu-west-3", "sa-east-1", "us-west-1"],
+        //   api: "listOTAUpdates",
+        //   title: "IoT OTA Updates",
+        //   id: "iot-ota-updates",
+        //   jmespath: "otaUpdates",
+        //   headings: ["otaUpdateId", "otaUpdateArn", "creationDate"]
+        // },
+        { service: "Iot",
+          skip_regions: ["ap-south-1", "ca-central-1", "eu-west-3", "sa-east-1", "us-west-1"],
+          api: "listOutgoingCertificates",
+          title: "IoT Outgoing Certificates",
+          id: "iot-outgoing-certificates",
+          jmespath: "outgoingCertificates",
+          headings: ["certificateArn", "certificateId", "transferredTo", "transferDate", "transferMessage", "creationDate"]
+        },
+        { service: "Iot",
+          skip_regions: ["ap-south-1", "ca-central-1", "eu-west-3", "sa-east-1", "us-west-1"],
+          api: "listPolicies",
+          title: "IoT Policies",
+          id: "iot-policies",
+          jmespath: "policies",
+          headings: ["policyName", "policyArn"]
+        },
+        { service: "Iot",
+          skip_regions: ["ap-south-1", "ca-central-1", "eu-west-3", "sa-east-1", "us-west-1"],
+          api: "listRoleAliases",
+          title: "IoT Role Aliases",
+          id: "iot-role-aliases",
+          jmespath: "map(&{Alias:@}, roleAliases)",
+          headings: ["Alias"]
+        },
+        // { service: "Iot", // CORS not enabled
+        //   skip_regions: ["ap-south-1", "ca-central-1", "eu-west-3", "sa-east-1", "us-west-1"],
+        //   api: "listStreams",
+        //   title: "IoT Streams",
+        //   id: "iot-streams",
+        //   jmespath: "streams",
+        //   headings: ["streamId", "streamArn", "streamVersion", "description"]
+        // },
+        { service: "Iot",
+          skip_regions: ["ap-south-1", "ca-central-1", "eu-west-3", "sa-east-1", "us-west-1"],
+          api: "listThingGroups",
+          title: "IoT Thing Groups",
+          id: "iot-thing-groups",
+          jmespath: "thingGroups",
+          headings: ["groupName", "groupArn"]
+        },
+        { service: "Iot",
+          skip_regions: ["ap-south-1", "ca-central-1", "eu-west-3", "sa-east-1", "us-west-1"],
+          api: "listThingRegistrationTasks",
+          title: "IoT Thing Registration Tasks",
+          id: "iot-thing-registration-tasks",
+          jmespath: "map(&{TaskId:@}, taskIds)",
+          headings: ["TaskId"]
+        },
+        { service: "Iot",
+          skip_regions: ["ap-south-1", "ca-central-1", "eu-west-3", "sa-east-1", "us-west-1"],
+          api: "listThings",
+          title: "IoT Things",
+          id: "iot-things",
+          jmespath: "things",
+          headings: ["thingName", "thingTypeName", "thingArn"]
+        },
+        { service: "Iot",
+          skip_regions: ["ap-south-1", "ca-central-1", "eu-west-3", "sa-east-1", "us-west-1"],
+          api: "listThingTypes",
+          title: "IoT Thing Types",
+          id: "iot-thing-types",
+          jmespath: "thingTypes",
+          headings: ["thingTypeName", "thingTypeArn", "thingTypeProperties.thingTypeDescription"]
+        },
+        { service: "Iot",
+          skip_regions: ["ap-south-1", "ca-central-1", "eu-west-3", "sa-east-1", "us-west-1"],
+          api: "listTopicRules",
+          title: "IoT Topic Rules",
+          id: "iot-topic-rules",
+          jmespath: "rules",
+          headings: ["ruleArn", "ruleName", "topicPattern", "createdAt", "ruleDisabled"]
+        },
+        // { service: "Iot", // CORS not enabled
+        //   skip_regions: ["ap-south-1", "ca-central-1", "eu-west-3", "sa-east-1", "us-west-1"],
+        //   api: "listV2LoggingLevels",
+        //   title: "IoT V2 Logging Levels",
+        //   id: "iot-v2-logging-levels",
+        //   jmespath: "logTargetConfigurations",
+        //   headings: ["logTarget.targetType", "logTarget.targetName", "logLevel"]
+        // },
 
 
         // { service: "S3", // CORS doesn't work, although published as supported
@@ -1314,9 +1459,17 @@
           tr.append($(`<td class="text-center">${d + 1}</td>`))
           for (let h=0; h<headings.length; h++) {
             if (typeof headings[h] === 'string') {
-              tr.append($(`<td>${jmespath.search(data[d], headings[h])}</td>`))
+              try {
+                tr.append($(`<td>${jmespath.search(data[d], headings[h])}</td>`))
+              } catch (e) {
+                console.error(`Error with jmespath: ${headings[h]}: ${e.message}`)
+              }
             } else {
-              tr.append($(`<td>${jmespath.search(data[d], Object.values(headings[h])[0])}</td>`))
+              try {
+                tr.append($(`<td>${jmespath.search(data[d], Object.values(headings[h])[0])}</td>`))
+              } catch (e) {
+                console.error(`Error with jmespath: ${Object.values(headings[h])[0]}: ${e.message}`)
+              }
             }
           }
           rows.push(tr)
@@ -1373,7 +1526,12 @@
                 showCounter('X', Date.now() - startTs)
                 return false
               }
-              const information = jmespath.search(data, `${query.jmespath}[]`)
+              let information
+              try {
+                information = jmespath.search(data, `${query.jmespath}[]`)
+              } catch (e) {
+                console.error(`Error with jmespath: ${query.jmespath}[]: ${e.message}`)
+              }
               if (!information) {
                 button.removeClass('btn-light').addClass('btn-warning')
                 showCounter('0', Date.now() - startTs)
@@ -1390,7 +1548,11 @@
             if (query.hasOwnProperty('params')) {
               caller[query.api].call(caller, query.params, tableHandler)
             } else {
-              caller[query.api].call(caller, tableHandler)
+              try {
+                caller[query.api].call(caller, tableHandler)
+              } catch (e) {
+                console.error(`Error calling ${query.service}.${query.api}: ${e.message}`)
+              }
             }
           }
         }

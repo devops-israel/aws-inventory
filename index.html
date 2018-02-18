@@ -299,22 +299,6 @@
           jmespath: "CloudFrontOriginAccessIdentityList.Items",
           headings: ["Id", "S3CanonicalUserId", "Comment"]
         },
-        { service: "Route53",
-          region: "global",
-          api: "listHostedZones",
-          title: "Route53",
-          id: "route53",
-          jmespath: "HostedZones",
-          headings: ["Id", "Name", "ResourceRecordSetCount", "Config.PrivateZone"]
-        },
-        { service: "Route53Domains",
-          region: "us-east-1",
-          api: "listDomains",
-          title: "Route53 Domains",
-          id: "route53domains",
-          jmespath: "Domains",
-          headings: ["DomainName", "AutoRenew", "TransferLock", "Expiry"]
-        },
         // -- no CORS for CloudHSMV2 and CloudHSM is deprecated
         // { service: "CloudHSMV2",
         //   api: "describeBackups",
@@ -1737,14 +1721,111 @@
           jmespath: "",
           headings: ["ResourceName", "ResourceType", {"Tag:Name": 'Tags[?Key=="Name"].Value[]'}]
         },
-
-
-        // { service: "S3", // CORS doesn't work, although published as supported
+        { service: "Route53",
+          region: "global",
+          api: "listHealthChecks",
+          title: "Route53 Health Checks",
+          id: "route53-health-checks",
+          jmespath: "HealthChecks",
+          headings: ["Id", "CallerReference", "LinkedService.ServicePrincipal", "LinkedService.Description", "HealthCheckConfig.Type", "HealthCheckConfig.IPAddress", "HealthCheckConfig.Port", "HealthCheckConfig.ResourcePath", "HealthCheckConfig.FullyQualifiedDomainName", "HealthCheckConfig.SearchString", "HealthCheckConfig.RequestInterval", "HealthCheckConfig.Inverted", "HealthCheckConfig.Regions[]", "HealthCheckVersion"]
+        },
+        { service: "Route53",
+          region: "global",
+          api: "listHostedZones",
+          title: "Route53 Zones",
+          id: "route53-zones",
+          jmespath: "HostedZones",
+          headings: ["Id", "Name", "ResourceRecordSetCount", "Config.PrivateZone", "LinkedService.ServicePrincipal", "LinkedService.Description"]
+        },
+        { service: "Route53",
+          region: "global",
+          api: "listQueryLoggingConfigs",
+          title: "Route53 Query Logging Configs",
+          id: "route53-query-logging-configs",
+          jmespath: "QueryLoggingConfigs",
+          headings: ["Id", "HostedZoneId", "CloudWatchLogsLogGroupArn"]
+        },
+        { service: "Route53",
+          region: "global",
+          api: "listReusableDelegationSets",
+          title: "Route53 Reusable Delegation Sets",
+          id: "route53-reusable-delegation-sets",
+          jmespath: "DelegationSets",
+          headings: ["Id", "CallerReference", "NameServers[]"]
+        },
+        { service: "Route53",
+          region: "global",
+          api: "listTrafficPolicies",
+          title: "Route53 Traffic Policies",
+          id: "route53-traffic-policies",
+          jmespath: "TrafficPolicySummaries",
+          headings: ["Id", "Name", "Type", "LatestVersion", "TrafficPolicyCount"]
+        },
+        { service: "Route53",
+          region: "global",
+          api: "listTrafficPolicyInstances",
+          title: "Route53 Traffic Policy Instances",
+          id: "route53-traffic-policy-instances",
+          jmespath: "TrafficPolicyInstances",
+          headings: ["Id", "HostedZoneId", "Name", "TTL", "State", "Message", "TrafficPolicyId", "TrafficPolicyVersion", "TrafficPolicyType"]
+        },
+        { service: "Route53Domains",
+          region: "us-east-1",
+          api: "listDomains",
+          title: "Route53 Domains",
+          id: "route53domains-domains",
+          jmespath: "Domains",
+          headings: ["DomainName", "AutoRenew", "TransferLock", "Expiry"]
+        },
+        { service: "Route53Domains",
+          region: "us-east-1",
+          api: "listOperations",
+          title: "Route53 Domains Operations",
+          id: "route53domains-operations",
+          jmespath: "Operations",
+          headings: ["OperationId", "Status", "Type", "SubmittedDate"]
+        },
+        // { service: "S3", // blocked on https://github.com/aws/aws-sdk-js/issues/1939
         //   api: "listBuckets",
         //   title: "S3 Buckets",
         //   id: "s3-buckets",
         //   jmespath: "Buckets",
         //   headings: ["Name", "CreationDate"]
+        // },
+        { service: "ServiceCatalog",
+          api: "listAcceptedPortfolioShares",
+          title: "Service Catalog Accepted Portfolio Shares",
+          id: "servicecatalog-accepted-portfolio-shares",
+          jmespath: "PortfolioDetails",
+          headings: ["Id", "DisplayName", "Description", "CreatedTime", "ProviderName"]
+        },
+        { service: "ServiceCatalog",
+          api: "listPortfolios",
+          title: "Service Catalog Portfolios",
+          id: "servicecatalog-portfolios",
+          jmespath: "PortfolioDetails",
+          headings: ["Id", "DisplayName", "Description", "CreatedTime", "ProviderName"]
+        },
+        // { service: "ServiceCatalog", // only works on accounts that have product plans provisioned
+        //   api: "listProvisionedProductPlans",
+        //   title: "Service Catalog Provisioned Product Plans",
+        //   id: "servicecatalog-provisioned-product-plans",
+        //   jmespath: "ProvisionedProductPlans",
+        //   headings: ["PlanName", "PlanId", "ProvisionProductId", "ProvisionProductName", "PlanType", "ProvisioningArtifactId"]
+        // },
+        { service: "ServiceCatalog",
+          api: "listRecordHistory",
+          title: "Service Catalog Record History",
+          id: "servicecatalog-record-history",
+          jmespath: "RecordDetails",
+          headings: ["RecordId", "ProvisionedProductName", "Status", "CreatedTime", "UpdatedTime", "ProvisionedProductType", "RecordType", "ProvisionedProductId", "ProductId", "ProvisioningArtifactId", "PathId"]
+        },
+        // { service: "ServiceCatalog", // only works on accounts that finished TagOptions migration
+        //   api: "listTagOptions",
+        //   title: "Service Catalog Tag Options",
+        //   id: "servicecatalog-tag-options",
+        //   jmespath: "TagOptionDetails",
+        //   headings: ["Key", "Value", "Active", "Id"]
         // },
       ];
 
@@ -1809,6 +1890,9 @@
           let region = AWS_REGIONS[r];
           for (let q=0; q<awsQueries.length; q++) {
             const query = awsQueries[q]
+            // if (query.service !== 'ServiceCatalog') { // DEBUG
+            //   continue // DEBUG
+            // } // DEBUG
             if (region === 'global' && (!query.hasOwnProperty('region') || query.region !== 'global')) {
               continue // show only global resources on global tab
             }

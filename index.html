@@ -1827,6 +1827,71 @@
         //   jmespath: "TagOptionDetails",
         //   headings: ["Key", "Value", "Active", "Id"]
         // },
+        { service: "SES",
+          skip_regions: ['eu-west-2', 'eu-west-3', 'ap-southeast-2', 'us-west-1', 'ap-south-1', 'ap-southeast-1', 'us-east-2', 'eu-central-1', 'ap-northeast-1', 'ca-central-1', 'ap-northeast-2', 'sa-east-1' ],
+          api: "describeActiveReceiptRuleSet",
+          title: "Simple Email Service (SES) Active Receipt Rule Set",
+          id: "ses-active-receipt-ruleset",
+          jmespath: "Rules",
+          headings: ["Name", "Enabled", "TlsPolicy", "Recipients[]", "ScanEnabled"]
+        },
+        { service: "SES",
+          skip_regions: ['eu-west-2', 'eu-west-3', 'ap-southeast-2', 'us-west-1', 'ap-south-1', 'ap-southeast-1', 'us-east-2', 'eu-central-1', 'ap-northeast-1', 'ca-central-1', 'ap-northeast-2', 'sa-east-1' ],
+          api: "listConfigurationSets",
+          title: "Simple Email Service (SES) Configuration Sets",
+          id: "ses-configuration-sets",
+          jmespath: "ConfigurationSets",
+          headings: ["Name"]
+        },
+        { service: "SES",
+          skip_regions: ['eu-west-2', 'eu-west-3', 'ap-southeast-2', 'us-west-1', 'ap-south-1', 'ap-southeast-1', 'us-east-2', 'eu-central-1', 'ap-northeast-1', 'ca-central-1', 'ap-northeast-2', 'sa-east-1' ],
+          api: "listCustomVerificationEmailTemplates",
+          params: { MaxResults: 50 },
+          title: "Simple Email Service (SES) Custom Vertification Email Templates",
+          id: "ses-custom-verification-email-templates",
+          jmespath: "CustomVerificationEmailTemplates",
+          headings: ["TemplateName", "FromEmailAddress", "TemplateSubject", "SuccessRedirectionURL", "FailureRedirectionURL"]
+        },
+        { service: "SES",
+          skip_regions: ['eu-west-2', 'eu-west-3', 'ap-southeast-2', 'us-west-1', 'ap-south-1', 'ap-southeast-1', 'us-east-2', 'eu-central-1', 'ap-northeast-1', 'ca-central-1', 'ap-northeast-2', 'sa-east-1' ],
+          api: "listIdentities",
+          title: "Simple Email Service (SES) Identities",
+          id: "ses-identities",
+          jmespath: "map(&{Identity:@}, Identities)",
+          headings: ["Identity"]
+        },
+        { service: "SES",
+          skip_regions: ['eu-west-2', 'eu-west-3', 'ap-southeast-2', 'us-west-1', 'ap-south-1', 'ap-southeast-1', 'us-east-2', 'eu-central-1', 'ap-northeast-1', 'ca-central-1', 'ap-northeast-2', 'sa-east-1' ],
+          api: "listReceiptFilters",
+          title: "Simple Email Service (SES) Receipt Filters",
+          id: "ses-receipt-filters",
+          jmespath: "Filters",
+          headings: ["Name", "IpFilter.Policy", "IpFilter.Cidr"]
+        },
+        { service: "SES",
+          skip_regions: ['eu-west-2', 'eu-west-3', 'ap-southeast-2', 'us-west-1', 'ap-south-1', 'ap-southeast-1', 'us-east-2', 'eu-central-1', 'ap-northeast-1', 'ca-central-1', 'ap-northeast-2', 'sa-east-1' ],
+          api: "listReceiptRuleSets",
+          title: "Simple Email Service (SES) Receipt Rule Sets",
+          id: "ses-receipt-rule-sets",
+          jmespath: "RuleSets",
+          headings: ["Name", "CreatedTimestamp"]
+        },
+        { service: "SES",
+          skip_regions: ['eu-west-2', 'eu-west-3', 'ap-southeast-2', 'us-west-1', 'ap-south-1', 'ap-southeast-1', 'us-east-2', 'eu-central-1', 'ap-northeast-1', 'ca-central-1', 'ap-northeast-2', 'sa-east-1' ],
+          api: "listTemplates",
+          title: "Simple Email Service (SES) Templates",
+          id: "ses-templates",
+          jmespath: "TemplatesMetadata",
+          headings: ["Name", "CreatedTimestamp"]
+        },
+        { service: "SES",
+          skip_regions: ['eu-west-2', 'eu-west-3', 'ap-southeast-2', 'us-west-1', 'ap-south-1', 'ap-southeast-1', 'us-east-2', 'eu-central-1', 'ap-northeast-1', 'ca-central-1', 'ap-northeast-2', 'sa-east-1' ],
+          api: "listVerifiedEmailAddresses",
+          title: "Simple Email Service (SES) Verified Email Addresses",
+          id: "ses-verified-email-addresses",
+          jmespath: "map(&{Address: @}, VerifiedEmailAddresses)",
+          headings: ["Address"]
+        },
       ];
 
       var tableTemplate =
@@ -1890,7 +1955,7 @@
           let region = AWS_REGIONS[r];
           for (let q=0; q<awsQueries.length; q++) {
             const query = awsQueries[q]
-            // if (query.service !== 'ServiceCatalog') { // DEBUG
+            // if (query.service !== 'SES') { // DEBUG
             //   continue // DEBUG
             // } // DEBUG
             if (region === 'global' && (!query.hasOwnProperty('region') || query.region !== 'global')) {

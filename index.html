@@ -96,12 +96,23 @@
           </div>
           <div class="col col-1 align-self-end">
             <div class="input-group input-group-sm">
-              <button type="button" tabindex="8" id="btn-aws-assume-role" class="btn btn-outline-secondary btn-sm form-control form-control-sm" data-toggle="button" aria-expanded="false" aria-pressed="false" aria-controls="aws-assume-role" autocomplete="off">assume role</button>
+              <button type="button" tabindex="8" id="btn-advanced" class="btn btn-outline-secondary btn-sm form-control form-control-sm" data-toggle="button" aria-expanded="false" aria-pressed="false" aria-controls="aws-advanced" autocomplete="off">advanced</button>
             </div>
           </div>
         </div>
 
-        <div class="form-row col col-12 mt-1" id="aws-assume-role" style="display:none">
+        <div class="form-row col col-12 mt-1" id="aws-session" style="display:none">
+          <div class="col col-10">
+            <div class="input-group input-group-sm">
+              <div class="input-group-prepend">
+                <span class="input-group-text">Session Token</span>
+              </div>
+              <input type="password" tabindex="2" id="aws-session-token" class="form-control form-control-sm" placeholder="optionally required">
+            </div>
+          </div>
+        </div>
+
+        <div class="form-row col col-12 mt-1" id="aws-advanced" style="display:none">
           <div class="col col-4">
             <div class="input-group input-group-sm">
               <div class="input-group-prepend">
@@ -2305,6 +2316,10 @@
           accessKeyId: $('#aws-access-key-id').val(),
           secretAccessKey: $('#aws-access-secret-key').val(),
         }
+        const sessionToken = $('#aws-session-token').val()
+        if (sessionToken) {
+            credentials.sessionToken = sessionToken
+        }
         const role_arn = $('#aws-role-arn').val()
         const external_id = $('#aws-external-id').val()
         const token_code = $('#aws-mfa-token-code').val()
@@ -2368,7 +2383,7 @@
 
       $('#aws-credentials-verify').on('click', credentialsVerify);
       $('#aws-credentials-drop').on('click', credentialsDrop);
-      $('#btn-aws-assume-role').on('click', function(){ $('#aws-assume-role').show(); $('#btn-aws-assume-role').hide() })
+      $('#btn-advanced').on('click', function(){ $('#aws-session').show(); $('#aws-advanced').show(); $('#btn-advanced').hide() })
     });
   </script>
 </html>

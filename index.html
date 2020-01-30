@@ -178,7 +178,7 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.13.0/umd/popper.min.js" integrity="sha256-pS96pU17yq+gVu4KBQJi38VpSuKN7otMrDQprzf/DWY=" crossorigin="anonymous"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha256-5+02zu5UULQkO7w1GIr6vftCgMfFdZcAHeDtFnKZsBs=" crossorigin="anonymous"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jmespath/0.15.0/jmespath.min.js" integrity="sha256-qWz+UNAHPTcBryGj4/YRC+NPcwjGx135OqBzZrMRY/A=" crossorigin="anonymous"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/aws-sdk/2.188.0/aws-sdk.min.js" integrity="sha256-ilzIUErOagTpjpFd1xjMDX+8zfzdYoxV5eR6En129B0=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/aws-sdk/2.610.0/aws-sdk.min.js" integrity="sha256-AsmTWD190JSBufhxQ2oobbkAuwQFy+AtFXqN8c6kmMg=" crossorigin="anonymous"></script>
   <script>
     $(function () {
       // bootstrap utils
@@ -2153,6 +2153,58 @@
         &nbsp;<span class="title"></span><span class="timing badge font-weight-light" style="display:none"></span>
       </a>`
 
+      function createTsvHead(headings) {
+        let tsvHead = '#\t'
+        for (let h = 0; h < headings.length; h++) {
+          if (typeof headings[h] === 'string') {
+            tsvHead += headings[h]
+          } else {
+            tsvHead += Object.keys(headings[h])[0]
+          }
+          if (h < (headings.length - 1)) tsvHead += '\t'
+        }
+        tsvHead += '\n'
+        return tsvHead
+      }
+
+      function createTsvBody(headings, data) {
+        const rows = []
+        for (let d = 0; d < data.length; d++) {
+          let tsvRow = `${d + 1}\t`
+          for (let h = 0; h < headings.length; h++) {
+            if (typeof headings[h] === 'string') {
+              try {
+                tsvRow += jmespath.search(data[d], headings[h])
+              } catch (e) {
+                console.error(`Error with jmespath: ${headings[h]}: ${e.message}`)
+              }
+            } else {
+              try {
+                tsvRow += jmespath.search(data[d], Object.values(headings[h])[0])
+              } catch (e) {
+                console.error(`Error with jmespath: ${Object.values(headings[h])[0]}: ${e.message}`)
+              }
+            }
+            if (h < (headings.length - 1)) tsvRow += '\t'
+          }
+          rows.push(tsvRow)
+        }
+        return rows.join('\n')
+      }
+
+      function createTsvLink(fileTitle = 'export', tsv = '') {
+        const fileName = fileTitle + '.tsv'
+        const blob = new Blob([tsv], { type: 'text/tab-separated-values;charset=utf-8;' })
+        const link = document.createElement("a");
+        const url = URL.createObjectURL(blob);
+        link.setAttribute("href", url);
+        link.textContent = `Download ${fileName}`
+        if (link.download !== undefined) {
+          link.setAttribute("download", fileName);
+        }
+        return link
+      }
+
       function createTableHead(headings) {
         const tr = $('<tr></tr>')
         tr.append($('<th class="text-center">#</th>'))
@@ -2169,7 +2221,7 @@
 
       function createTableBody(headings, data) {
         const rows = []
-        for (d=0; d<data.length; d++) {
+        for (let d=0; d<data.length; d++) {
           const tr = $('<tr></tr>')
           tr.append($(`<td class="text-center">${d + 1}</td>`))
           for (let h=0; h<headings.length; h++) {
@@ -2193,7 +2245,7 @@
       }
 
       function inventoryServices() {
-        for (r=0; r<AWS_REGIONS.length; r++) {
+        for (let r=0; r<AWS_REGIONS.length; r++) {
           let region = AWS_REGIONS[r];
           for (let q=0; q<awsQueries.length; q++) {
             const query = awsQueries[q]
@@ -2206,7 +2258,7 @@
             if (region !== 'global' && query.hasOwnProperty('region') && query.region === 'global') {
               continue // do not show global resources in other regions
             }
-            if (query.hasOwnProperty('region') && query.region != region) {
+            if (query.hasOwnProperty('region') && query.region !== region) {
               continue // restrict to specific region only
             }
             if (query.hasOwnProperty('skip_regions') && query.skip_regions.includes(region)) {
@@ -2260,6 +2312,9 @@
                 button.removeClass('btn-light').addClass('btn-primary')
                 content.find('thead').append(createTableHead(query.headings))
                 content.find('tbody').append(createTableBody(query.headings, information))
+                let tsv = createTsvHead(query.headings)
+                tsv += createTsvBody(query.headings, information)
+                content.append(createTsvLink(query.id, tsv))
               }
               showCounter(information.length, Date.now() - startTs)
             }

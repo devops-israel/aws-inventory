@@ -165,6 +165,14 @@
     <div class="row mt-2">
       <div class="col-2 side-bar">
         <ul id="aws-region-tabs" class="nav flex-sm-column nav-pills" role="tablist" aria-orientation="vertical"></ul><!-- regions -->
+        <div id="export-regions-div"style="display:none"  class="input-group">
+        <select id="export-regions" class="custom-select" >
+          <option selected>All</option>
+        </select>
+          <div class="input-group-append">
+            <button id="export-button" class="btn btn-primary" type="button">Export</button>
+          </div>
+      </div>
       </div>
       <div class="col-10">
         <div id="aws-inventory" class="tab-content"></div>
@@ -179,6 +187,7 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha256-5+02zu5UULQkO7w1GIr6vftCgMfFdZcAHeDtFnKZsBs=" crossorigin="anonymous"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jmespath/0.15.0/jmespath.min.js" integrity="sha256-qWz+UNAHPTcBryGj4/YRC+NPcwjGx135OqBzZrMRY/A=" crossorigin="anonymous"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/aws-sdk/2.188.0/aws-sdk.min.js" integrity="sha256-ilzIUErOagTpjpFd1xjMDX+8zfzdYoxV5eR6En129B0=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.15.5/xlsx.full.min.js" integrity="sha256-L4toVMmsT96M05qV0wZ09xLhJ247DfIdqkhCfBZYwYU=" crossorigin="anonymous"></script>  
   <script>
     $(function () {
       // bootstrap utils
@@ -2153,6 +2162,27 @@
         &nbsp;<span class="title"></span><span class="timing badge font-weight-light" style="display:none"></span>
       </a>`
 
+      //String to array buffer needed for excel
+      function s2ab(s) {
+        var buf = new ArrayBuffer(s.length);
+        var view = new Uint8Array(buf);
+        for (var i=0; i<s.length; i++) view[i] = s.charCodeAt(i) & 0xFF;
+        return buf;        
+      }
+
+      function createExcelLink(fileTitle = 'export',wbout = ''){
+        const fileName = fileTitle + '.xlsx'
+        const blob = new Blob([s2ab(wbout)],{type:"application/octet-stream"});
+        const link = document.createElement("a");
+        const url = URL.createObjectURL(blob);
+        link.setAttribute("href", url);
+        link.textContent = `Download ${fileName}`
+        if (link.download !== undefined) {
+          link.setAttribute("download", fileName);
+        }
+        return link
+      }
+
       function createTableHead(headings) {
         const tr = $('<tr></tr>')
         tr.append($('<th class="text-center">#</th>'))
@@ -2260,6 +2290,9 @@
                 button.removeClass('btn-light').addClass('btn-primary')
                 content.find('thead').append(createTableHead(query.headings))
                 content.find('tbody').append(createTableBody(query.headings, information))
+                var wb = XLSX.utils.table_to_book(document.getElementById("region-" + region + '-' + query.id), { sheet: (region + '-' + query.id).substring(0, 29) });
+                var wbout = XLSX.write(wb, { bookType: 'xlsx', bookSST: true, type: 'binary' });
+                content.append(createExcelLink(query.id + '-' + region, wbout));
               }
               showCounter(information.length, Date.now() - startTs)
             }
@@ -2282,6 +2315,7 @@
         var ec2 = new AWS.EC2()
         var tabs = []
         var tabPanes = []
+        var regionSelectbox = []
         ec2.describeRegions(function(err, data) {
           $('#aws-region-tabs').empty()
           $('#aws-inventory').empty()
@@ -2291,11 +2325,14 @@
           for (var i=0; i<regions.length; i++) {
             tabs.push( $(`<li class="nav-item"><a href="#region-${regions[i]}" id="tab-region-${regions[i]}" class="nav-link" data-toggle="pill" role="tab">${regions[i]}</a></li>`) );
             tabPanes.push( $(`<div class="tab-pane show" id="region-${regions[i]}" role="tabpanel" aria-labelledby="tab-region-${regions[i]}"></div>`) )
+            regionSelectbox.push ($(`<option value="${regions[i]}">${regions[i]}</option>`))
           }
           $('#aws-region-tabs').append(tabs);
           $('#aws-inventory').append(tabPanes);
+          $('#export-regions').append(regionSelectbox);
           inventoryServices()
           $('#tab-region-'+regions[0]).tab('show');
+          $('#export-regions-div').show();
         })
       }
 
@@ -2379,10 +2416,43 @@
         $('#aws-credentials').show()
         $('#aws-region-tabs').empty()
         $('#aws-inventory').empty()
+        $('#export-regions').empty()
+      }
+      
+      function exportInventory(){
+        var exportOption = $("#export-regions option:selected").text();
+        if (exportOption == 'All'){
+          exportAllRegions();
+        } else {
+          exportByRegion(exportOption);
+        }
+      }
+
+      function exportAllRegions(){
+        AWS_REGIONS.forEach(function (r) {
+          exportByRegion(r);
+        });
+      }
+
+      function exportByRegion(regionName){
+        regionHtmlIdPattern = 'region-' + regionName + '-'
+        var wb = XLSX.utils.book_new();
+        var elements = document.querySelectorAll('div[id^="'+ regionHtmlIdPattern+'"]');
+        elements.forEach(function (e) {
+          var table = e.getElementsByTagName("table")[0]
+          if (table != undefined && table.rows.length > 0) {
+            var ws = XLSX.utils.table_to_sheet(e);
+            //Excel sheet name limit to 32 chars
+            var sheetName = e.id.replace(regionHtmlIdPattern,'')
+            XLSX.utils.book_append_sheet(wb, ws, sheetName.substring(0, 31))
+          }
+        });
+        XLSX.writeFile(wb, "inventory-" + regionName + ".xlsx");
       }
 
       $('#aws-credentials-verify').on('click', credentialsVerify);
       $('#aws-credentials-drop').on('click', credentialsDrop);
+      $('#export-button').on('click', exportInventory);
       $('#btn-advanced').on('click', function(){ $('#aws-session').show(); $('#aws-advanced').show(); $('#btn-advanced').hide() })
     });
   </script>

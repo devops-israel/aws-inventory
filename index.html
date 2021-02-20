@@ -2198,6 +2198,7 @@
         const link = document.createElement("a");
         const url = URL.createObjectURL(blob);
         link.setAttribute("href", url);
+        link.className = "btn btn-primary btn-sm";
         link.textContent = `Download ${fileName}`
         if (link.download !== undefined) {
           link.setAttribute("download", fileName);
